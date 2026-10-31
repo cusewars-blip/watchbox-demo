@@ -1,0 +1,1777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>WatchBox — Luxury Watch Mystery Boxes (Demo)</title>
+<style>
+/* ═══════════ WatchBox — icy luxury demo theme ═══════════ */
+:root{
+  --bg:#05080d;
+  --panel:#0c1219;
+  --panel-2:#111927;
+  --panel-3:#182233;
+  --line:#22314a;
+  --text:#eef4fa;
+  --muted:#93a5bb;
+  --ice:#38bdf8;
+  --ice-bright:#7dd3fc;
+  --ice-dark:#0369a1;
+  --gold:#e8b84b;
+  --gold-soft:#f5d67b;
+  --green:#22c55e;
+  --r-common:#a8b6c4;
+  --r-uncommon:#6ee7b7;
+  --r-rare:#38bdf8;
+  --r-epic:#a78bfa;
+  --r-legendary:#f5c451;
+  --r-grail:#eaf7ff;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:#000}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  color:var(--text);
+  display:flex;justify-content:center;
+}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+strong{color:#fff}
+
+/* ── phone frame ─────────────────────────── */
+.phone{
+  position:relative;
+  width:100%;max-width:430px;
+  height:100dvh;
+  background:
+    radial-gradient(120% 60% at 85% -5%, rgba(56,189,248,.13), transparent 55%),
+    radial-gradient(100% 50% at -10% 30%, rgba(232,184,75,.05), transparent 50%),
+    linear-gradient(180deg,#0a1018 0%, #05080d 100%);
+  display:flex;flex-direction:column;
+  overflow:hidden;
+}
+@media (min-width:480px){
+  .phone{height:min(100dvh,940px);margin:auto;border:1px solid #22314a;border-radius:28px;box-shadow:0 30px 80px rgba(0,0,0,.8)}
+  body{align-items:center;min-height:100dvh}
+}
+
+/* ── top bar ─────────────────────────────── */
+.topbar{
+  display:flex;align-items:center;gap:10px;
+  padding:14px 16px 10px;
+  position:relative;z-index:5;
+}
+.icon-btn{
+  width:40px;height:40px;border-radius:50%;
+  background:rgba(255,255,255,.07);
+  display:flex;align-items:center;justify-content:center;color:#e7ebef;flex:none;
+}
+.topbar-title{font-size:19px;font-weight:700;letter-spacing:.2px}
+.limited-badge{
+  margin-left:auto;display:flex;flex-direction:column;align-items:center;gap:1px;
+  color:var(--ice-bright);font-size:9px;font-weight:800;letter-spacing:2.5px;
+  filter:drop-shadow(0 0 7px rgba(56,189,248,.7));
+}
+.wallet-pill{
+  display:flex;align-items:stretch;gap:0;flex:none;
+  background:#101825;border:1px solid var(--line);border-radius:999px;overflow:hidden;
+  padding:0;height:38px;align-items:center;
+}
+.wallet-amount{font-weight:700;font-size:15px;padding:0 6px 0 14px}
+.wallet-plus{
+  background:var(--green);color:#04150a;height:100%;
+  display:flex;align-items:center;justify-content:center;
+  padding:0 11px;margin-left:8px;
+  clip-path:polygon(22% 0,100% 0,100% 100%,0 100%);
+}
+.wallet-plus svg{margin-left:4px}
+
+/* ── views ───────────────────────────────── */
+.views{flex:1;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none}
+.views::-webkit-scrollbar{display:none}
+.view{display:none;padding:6px 18px 26px;animation:fadeIn .25s ease}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.view-title{font-size:24px;font-weight:800;margin:8px 0 4px}
+.view-sub{color:var(--muted);font-size:14px;margin-bottom:16px;line-height:1.45}
+.section-title{font-size:17px;font-weight:700;margin:20px 0 10px}
+.fine-print{color:var(--muted);font-size:12.5px;line-height:1.5;margin-top:14px}
+.empty-note{color:var(--muted);font-size:14px;text-align:center;padding:22px 0}
+
+/* ── box carousel ────────────────────────── */
+.carousel{
+  display:flex;overflow-x:auto;scroll-snap-type:x mandatory;
+  scrollbar-width:none;margin:0 -18px;padding:4px 0 2px;
+}
+.carousel::-webkit-scrollbar{display:none}
+.slide{
+  flex:0 0 100%;scroll-snap-align:center;
+  padding:0 34px;display:flex;flex-direction:column;align-items:center;
+  position:relative;
+}
+.pack-visual{width:min(248px,68vw);position:relative;filter:drop-shadow(0 24px 34px rgba(0,0,0,.65));animation:packFloat 5s ease-in-out infinite}
+@keyframes packFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.slide-limited{
+  position:absolute;top:10px;right:2px;display:flex;align-items:center;gap:4px;
+  color:#06121f;background:linear-gradient(180deg,var(--ice-bright),var(--ice));
+  font-size:9.5px;font-weight:900;letter-spacing:1.6px;border-radius:99px;padding:5px 9px;
+  box-shadow:0 0 16px rgba(56,189,248,.55);
+}
+.pack-name{font-size:23px;font-weight:800;margin:20px 0 12px;text-align:center}
+.whats-inside{
+  display:flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,.07);color:#dfe5ec;
+  border-radius:999px;padding:9px 18px;font-size:14px;font-weight:600;
+}
+.pack-stats{width:100%;margin-top:24px}
+.pack-stats .divider-row{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:13.5px;margin-bottom:10px}
+.pack-stats .divider-row::before,.pack-stats .divider-row::after{content:"";flex:1;height:1px;background:var(--line)}
+.stat-row{display:flex;justify-content:space-between;align-items:flex-end}
+.stat-cell label{display:block;color:var(--muted);font-size:13px;margin-bottom:3px}
+.stat-cell .val{font-size:19px;font-weight:700}
+.stat-cell.right{text-align:right}
+.style-link{display:flex;align-items:center;gap:4px;font-size:17px;font-weight:700;color:#fff;padding:2px 0}
+.style-link .chev{color:var(--muted);font-size:20px;line-height:1}
+.btn-buy{
+  width:100%;margin-top:22px;
+  background:linear-gradient(180deg,#56c8f5,var(--ice) 55%,var(--ice-dark));
+  color:#fff;font-size:18px;font-weight:800;
+  border-radius:999px;padding:16px;
+  box-shadow:0 12px 26px rgba(56,189,248,.32);
+  transition:transform .12s ease, filter .12s ease;
+}
+.btn-buy:active{transform:scale(.98)}
+.carousel-nav{
+  position:absolute;top:170px;width:36px;height:36px;border-radius:50%;
+  background:rgba(255,255,255,.08);color:#fff;font-size:20px;
+  display:flex;align-items:center;justify-content:center;z-index:3;
+}
+.carousel-nav.prev{left:2px}.carousel-nav.next{right:2px}
+.dots{display:flex;justify-content:center;gap:7px;margin-top:16px}
+.dot{width:7px;height:7px;border-radius:50%;background:#2b3a52;transition:all .2s}
+.dot.active{background:var(--ice);width:20px;border-radius:99px}
+.swipe-hint{text-align:center;color:#5d6d82;font-size:12px;margin-top:10px}
+.maxpull-val{text-align:center;font-size:33px;font-weight:800;margin:0 0 14px}
+
+/* ── live pulls feed ─────────────────────── */
+.feed-wrap{
+  margin-top:26px;background:var(--panel);border:1px solid var(--line);
+  border-radius:16px;padding:14px 14px 6px;
+}
+.feed-head{
+  display:flex;align-items:center;gap:7px;
+  font-size:11.5px;font-weight:800;letter-spacing:1.8px;color:#fff;margin-bottom:8px;
+}
+.feed-dot{width:8px;height:8px;border-radius:50%;background:#4ade80;box-shadow:0 0 8px rgba(74,222,128,.9);animation:feedPulse 1.6s ease-in-out infinite}
+@keyframes feedPulse{0%,100%{opacity:1}50%{opacity:.35}}
+.feed-sim{margin-left:auto;font-size:10px;font-weight:600;letter-spacing:.4px;color:var(--muted);text-transform:none}
+.feed-item{
+  display:flex;align-items:center;gap:11px;
+  padding:9px 0;border-bottom:1px solid rgba(255,255,255,.05);
+}
+.feed-item:last-child{border-bottom:none}
+.feed-new{animation:feedIn .45s ease}
+@keyframes feedIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+.feed-ava{
+  width:34px;height:34px;border-radius:50%;flex:none;
+  background:linear-gradient(140deg,#274b73,#12233a);border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:var(--ice-bright);
+}
+.feed-main{flex:1;font-size:13px;line-height:1.35;min-width:0}
+.feed-main span{display:block;color:var(--muted);font-size:11.5px;margin-top:1px}
+.feed-val{font-size:14.5px;font-weight:800;color:var(--gold-soft)}
+
+/* ── bottom nav ──────────────────────────── */
+.bottom-nav{
+  display:flex;background:rgba(7,10,15,.96);border-top:1px solid #16202f;
+  padding:8px 4px calc(8px + env(safe-area-inset-bottom));z-index:5;
+}
+.nav-item{
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
+  color:#7488a0;font-size:11px;font-weight:600;padding:4px 0;
+}
+.nav-item.active{color:#fff}
+.nav-item.active svg{color:var(--ice)}
+
+/* ── watch cards ─────────────────────────── */
+.card-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.wcard{
+  --rc:var(--r-common);
+  background:linear-gradient(165deg,var(--panel-3),var(--panel) 60%);
+  border:1.5px solid var(--rc);border-radius:16px;overflow:hidden;
+  position:relative;display:flex;flex-direction:column;
+}
+.wcard.rarity-common{--rc:var(--r-common)}
+.wcard.rarity-uncommon{--rc:var(--r-uncommon)}
+.wcard.rarity-rare{--rc:var(--r-rare)}
+.wcard.rarity-epic{--rc:var(--r-epic)}
+.wcard.rarity-legendary{--rc:var(--r-legendary)}
+.wcard.rarity-grail{--rc:var(--r-grail)}
+.wcard.rarity-rare{box-shadow:0 0 18px rgba(56,189,248,.35)}
+.wcard.rarity-epic{box-shadow:0 0 20px rgba(167,139,250,.4)}
+.wcard.rarity-legendary{box-shadow:0 0 26px rgba(245,196,81,.5)}
+.wcard.rarity-grail{box-shadow:0 0 34px rgba(190,240,255,.65)}
+.wcard-art{
+  aspect-ratio:4/3.1;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;
+  background:radial-gradient(120% 120% at 50% 0%, rgba(125,211,252,.14), transparent 60%),linear-gradient(165deg,#131c2a,#0a0f16);
+}
+.wcard-art svg{width:84%;height:92%}
+.wcard.holo .wcard-art::after{
+  content:"";position:absolute;inset:-40%;
+  background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.38) 45%,rgba(125,211,252,.3) 52%,rgba(245,214,123,.28) 58%,transparent 72%);
+  animation:holoShift 2.6s ease-in-out infinite;pointer-events:none;
+}
+@keyframes holoShift{0%{transform:translateX(-55%) rotate(0.001deg)}50%{transform:translateX(55%) rotate(0.001deg)}100%{transform:translateX(-55%) rotate(0.001deg)}}
+.wcard-body{padding:10px 12px 12px;display:flex;flex-direction:column;gap:3px;flex:1}
+.wcard-name{font-size:15.5px;font-weight:800;line-height:1.15}
+.wcard-type{color:var(--muted);font-size:11px;font-weight:600;letter-spacing:.3px;line-height:1.35}
+.rarity-pill{
+  align-self:flex-start;font-size:10px;font-weight:800;letter-spacing:1.2px;
+  color:#0b1017;background:var(--rc);border-radius:99px;padding:3px 8px;margin-top:2px;
+}
+.wcard-value{font-size:17px;font-weight:800;margin-top:auto;padding-top:6px}
+.wcard-value small{display:block;color:var(--muted);font-size:10.5px;font-weight:600;letter-spacing:.4px}
+.btn-sell-card{
+  margin-top:8px;background:rgba(34,197,94,.14);color:#4ade80;
+  border:1px solid rgba(34,197,94,.4);border-radius:10px;padding:8px;font-size:13px;font-weight:700;width:100%;
+}
+.btn-ship-card{
+  margin-top:7px;background:rgba(232,184,75,.1);color:var(--gold-soft);
+  border:1px solid rgba(232,184,75,.45);border-radius:10px;padding:8px;font-size:13px;font-weight:700;width:100%;
+}
+.ship-tag{
+  margin-top:8px;text-align:center;font-size:10.5px;font-weight:800;letter-spacing:.8px;
+  color:var(--ice-bright);background:rgba(56,189,248,.1);
+  border:1px dashed rgba(56,189,248,.45);border-radius:10px;padding:8px 6px;line-height:1.4;
+}
+
+/* ── collection / account ────────────────── */
+.collection-summary{
+  display:flex;gap:12px;background:var(--panel);border:1px solid var(--line);
+  border-radius:16px;padding:16px;margin-bottom:16px;
+}
+.collection-summary>div{flex:1}
+.summary-label{color:var(--muted);font-size:12px;font-weight:600;margin-bottom:4px}
+.summary-value{font-size:21px;font-weight:800}
+.profile-card{display:flex;gap:14px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px}
+.avatar{width:52px;height:52px;border-radius:50%;background:linear-gradient(140deg,var(--ice),#123a5e);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;flex:none}
+.profile-name{font-size:17px;font-weight:800}
+.profile-sub{color:var(--muted);font-size:12.5px;margin-top:2px}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.stat-box{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px}
+.stat-num{font-size:19px;font-weight:800}
+.stat-label{color:var(--muted);font-size:12px;font-weight:600;margin-top:3px}
+.history-list{display:flex;flex-direction:column;gap:10px}
+.history-item{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.history-main{display:flex;justify-content:space-between;gap:10px;font-size:14px}
+.history-main b{font-weight:700}
+.history-sub{color:var(--muted);font-size:12px;margin-top:3px;display:flex;justify-content:space-between;gap:8px}
+.history-action{font-weight:700}
+.history-action.sold{color:#4ade80}
+.history-action.shipped{color:var(--ice-bright)}
+.legal-box{margin-top:22px;background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.3);border-radius:14px;padding:14px;font-size:12.5px;line-height:1.55;color:#d8dde4;display:flex;flex-direction:column;gap:8px}
+.btn-ghost{
+  width:100%;margin-top:10px;padding:13px;border-radius:12px;
+  background:rgba(255,255,255,.05);color:#dfe5ec;font-size:15px;font-weight:700;
+  border:1px solid var(--line);
+}
+.btn-ghost.danger{color:#f87171;border-color:rgba(248,113,113,.35);margin-top:22px}
+.btn-primary{
+  width:100%;padding:15px;border-radius:999px;
+  background:linear-gradient(180deg,#56c8f5,var(--ice) 55%,var(--ice-dark));
+  color:#fff;font-size:16.5px;font-weight:800;
+  box-shadow:0 10px 22px rgba(56,189,248,.3);
+}
+.btn-primary:disabled{background:#232f42;color:#7186a0;box-shadow:none;cursor:not-allowed}
+
+/* ── rewards ─────────────────────────────── */
+.rewards-card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:22px 18px;text-align:center}
+.rewards-points{font-size:44px;font-weight:800}
+.rewards-points small{font-size:16px;color:var(--muted);font-weight:600}
+.progress-track{background:#1c2940;height:12px;border-radius:99px;overflow:hidden;margin:16px 0 8px}
+.progress-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--ice-bright),var(--ice));border-radius:99px;transition:width .5s ease}
+.progress-label{color:var(--muted);font-size:13px;font-weight:600}
+.reward-prize{display:flex;gap:9px;align-items:center;justify-content:center;color:#cfeaff;background:rgba(56,189,248,.09);border:1px dashed rgba(56,189,248,.45);border-radius:12px;padding:11px;margin:16px 0;font-size:13.5px;font-weight:600}
+
+/* ── modals / sheets ─────────────────────── */
+.modal-backdrop{
+  position:absolute;inset:0;background:rgba(3,4,6,.72);z-index:40;
+  display:flex;align-items:flex-end;justify-content:center;
+  animation:fadeIn .2s ease;
+}
+.modal-backdrop[hidden]{display:none}
+.modal-sheet{
+  background:#0d141f;border-radius:24px 24px 0 0;border-top:1px solid var(--line);
+  width:100%;max-height:88%;overflow-y:auto;padding:10px 22px calc(22px + env(safe-area-inset-bottom));
+  animation:sheetUp .28s cubic-bezier(.2,.9,.3,1);
+}
+@keyframes sheetUp{from{transform:translateY(46px);opacity:.4}to{transform:none;opacity:1}}
+.sheet-handle{width:42px;height:4.5px;border-radius:99px;background:#33455f;margin:4px auto 14px}
+.modal-sheet h3{font-size:20px;font-weight:800}
+.sheet-sub{color:var(--muted);font-size:13.5px;line-height:1.5;margin:6px 0 16px}
+.odds-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.sheet-x{color:var(--muted);font-size:16px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.06);flex:none}
+.sheet-label{font-size:11.5px;font-weight:800;letter-spacing:1.6px;color:var(--muted);text-transform:uppercase;margin:16px 0 9px}
+.topup-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:8px}
+.topup-btn{background:var(--panel-3);border:1px solid var(--line);border-radius:14px;padding:17px;font-size:18px;font-weight:800;color:#fff}
+.topup-btn:active{border-color:var(--green);color:#4ade80}
+
+/* style options */
+.style-opt{
+  width:100%;text-align:left;display:flex;gap:12px;align-items:flex-start;
+  background:var(--panel-2);border:1.5px solid var(--line);border-radius:14px;
+  padding:13px 14px;margin-bottom:10px;transition:border-color .15s;
+}
+.style-opt.selected{border-color:var(--ice);background:rgba(56,189,248,.07)}
+.style-radio{width:20px;height:20px;border-radius:50%;border:2px solid #44597a;flex:none;margin-top:2px;position:relative}
+.style-opt.selected .style-radio{border-color:var(--ice)}
+.style-opt.selected .style-radio::after{content:"";position:absolute;inset:3.5px;border-radius:50%;background:var(--ice)}
+.style-opt-name{font-size:15.5px;font-weight:800}
+.style-opt-desc{color:var(--muted);font-size:12.5px;line-height:1.45;margin-top:2px}
+
+/* odds bands */
+.band-row{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.band-range{width:96px;flex:none;font-size:12.5px;font-weight:700;color:#e7ebef}
+.band-track{flex:1;height:15px;background:#1b2940;border-radius:5px;overflow:hidden}
+.band-fill{height:100%;border-radius:5px;min-width:3px;transition:width .35s ease}
+.band-pct{width:48px;flex:none;text-align:right;font-size:13.5px;font-weight:800}
+.minmax{display:flex;align-items:center;gap:10px;margin:15px 0 4px;font-size:14.5px}
+.minmax .dots-line{flex:1;border-bottom:2px dotted #33455f;transform:translateY(-3px)}
+.minmax b{font-weight:800}
+.guarantee{color:var(--muted);font-size:12.5px;line-height:1.55;margin:10px 0 16px}
+
+/* ── open overlay (lift the lid) ─────────── */
+.rip-overlay{
+  position:absolute;inset:0;z-index:50;
+  background:radial-gradient(110% 60% at 50% 0%,rgba(56,189,248,.15),transparent 60%),#05080e;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:26px 22px;animation:fadeIn .25s ease;
+}
+.rip-overlay[hidden]{display:none}
+.rip-close{position:absolute;top:16px;right:16px;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.08);color:#dfe5ec;font-size:15px;z-index:3}
+.rip-stage{display:flex;flex-direction:column;align-items:center;width:100%}
+.rip-stage[hidden]{display:none}
+.rip-title{font-size:21px;font-weight:800;text-align:center}
+.rip-hint{color:var(--muted);font-size:13.5px;margin:6px 0 20px;text-align:center}
+.box-stage-wrap{
+  position:relative;width:min(250px,68vw);
+  perspective:700px;touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab;
+}
+.box-stage-wrap:active{cursor:grabbing}
+.box-visual{width:100%;filter:drop-shadow(0 24px 34px rgba(0,0,0,.65))}
+.lid-flap{
+  position:absolute;left:9%;right:9%;top:15.5%;height:17.5%;
+  background:linear-gradient(180deg,#1c2a40,#101a29);
+  border:1.5px solid rgba(125,211,252,.5);border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  transform-origin:50% 0%;
+  font-size:10px;font-weight:800;letter-spacing:3.5px;color:var(--ice-bright);
+  box-shadow:0 6px 18px rgba(0,0,0,.5);
+  pointer-events:none;
+}
+.box-stage-wrap.opened .lid-flap{
+  transition:transform .6s cubic-bezier(.3,.7,.4,1),opacity .6s;
+  transform:rotateX(-108deg) translateY(-14px)!important;opacity:0;
+}
+.sweep{
+  position:absolute;inset:0;overflow:hidden;border-radius:14px;pointer-events:none;opacity:0;
+}
+.sweep::after{
+  content:"";position:absolute;inset:-30%;
+  background:linear-gradient(105deg,transparent 42%,rgba(190,240,255,.35) 50%,transparent 58%);
+  transform:translateX(-70%);
+}
+.box-stage-wrap.opened .sweep{opacity:1}
+.box-stage-wrap.opened .sweep::after{animation:sweepMove .7s ease .1s forwards}
+@keyframes sweepMove{to{transform:translateX(70%)}}
+.tear-progress{height:7px;background:#1c2940;border-radius:99px;overflow:hidden;width:min(250px,68vw)}
+.tear-progress-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--ice-bright),var(--ice))}
+.lid-progress{margin-top:16px}
+.rip-btn{margin-top:22px;max-width:300px}
+.rarity-banner{font-size:24px;font-weight:900;letter-spacing:1.5px;margin-bottom:18px;text-align:center;animation:bannerPop .45s cubic-bezier(.2,1.4,.4,1)}
+@keyframes bannerPop{from{transform:scale(.5);opacity:0}to{transform:scale(1);opacity:1}}
+.reveal-cushion{
+  background:
+    radial-gradient(90% 70% at 50% 38%, #1d2f47 0%, #122036 55%, #0a1424 100%);
+  border:1px solid rgba(125,211,252,.25);
+  border-radius:22px;padding:20px 16px 16px;
+  box-shadow:inset 0 10px 24px rgba(0,0,0,.55), 0 24px 50px rgba(0,0,0,.55);
+  animation:cardReveal .55s cubic-bezier(.2,1.2,.35,1);
+}
+.reveal-slot{width:min(230px,62vw)}
+@keyframes cardReveal{from{transform:scale(.55) rotateY(70deg);opacity:0}to{transform:scale(1) rotateY(0);opacity:1}}
+.reveal-slot .wcard{box-shadow:0 24px 50px rgba(0,0,0,.6)}
+.reveal-slot .wcard.rarity-rare{box-shadow:0 0 34px rgba(56,189,248,.55)}
+.reveal-slot .wcard.rarity-epic{box-shadow:0 0 40px rgba(167,139,250,.6)}
+.reveal-slot .wcard.rarity-legendary{box-shadow:0 0 52px rgba(245,196,81,.7)}
+.reveal-slot .wcard.rarity-grail{box-shadow:0 0 64px rgba(190,240,255,.8)}
+.sell-note{color:var(--muted);font-size:12.5px;line-height:1.5;text-align:center;margin:16px 4px 14px;max-width:320px}
+.reveal-actions{display:flex;flex-direction:column;gap:10px;width:100%;max-width:320px}
+.btn-sell{
+  width:100%;padding:14px;border-radius:999px;font-size:16px;font-weight:800;
+  background:rgba(34,197,94,.13);color:#4ade80;border:1.5px solid rgba(34,197,94,.5);
+}
+.btn-ship{
+  width:100%;padding:14px;border-radius:999px;font-size:16px;font-weight:800;
+  background:rgba(232,184,75,.1);color:var(--gold-soft);border:1.5px solid rgba(232,184,75,.55);
+}
+
+/* ── toast ───────────────────────────────── */
+.toast{
+  position:absolute;left:50%;bottom:104px;transform:translateX(-50%);
+  background:#16222f;border:1px solid var(--line);color:#fff;
+  font-size:14px;font-weight:600;border-radius:999px;padding:11px 20px;z-index:80;
+  box-shadow:0 14px 30px rgba(0,0,0,.55);white-space:nowrap;animation:fadeIn .2s ease;
+  max-width:92%;text-overflow:ellipsis;overflow:hidden;
+}
+
+/* ── showroom chips + locks ──────────────── */
+.chips{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.chip{
+  padding:8px 15px;border-radius:999px;font-size:13.5px;font-weight:700;
+  background:var(--panel-2);border:1px solid var(--line);color:var(--muted);
+}
+.chip.active{background:rgba(56,189,248,.12);border-color:var(--ice);color:#fff}
+.wcard.locked .wcard-art svg{filter:grayscale(.85);opacity:.55}
+.lock-block{margin-top:9px}
+.lock-line{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--gold-soft)}
+.lock-line svg{flex:none}
+.pb-track{height:7px;background:#1c2940;border-radius:99px;overflow:hidden;margin-top:6px}
+.pb-fill{height:100%;background:linear-gradient(90deg,#d99a26,var(--gold-soft));border-radius:99px;transition:width .5s ease}
+.lock-sub{color:var(--muted);font-size:11px;margin-top:5px;line-height:1.4}
+.pool-badge{
+  margin-top:9px;align-self:flex-start;font-size:10.5px;font-weight:800;letter-spacing:1px;
+  color:#4ade80;background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.4);
+  border-radius:99px;padding:4px 9px;
+}
+
+/* ── house reserve panel ─────────────────── */
+.reserve-panel{
+  margin-top:16px;background:linear-gradient(165deg,rgba(232,184,75,.06),var(--panel) 55%);
+  border:1px solid rgba(232,184,75,.35);border-radius:16px;padding:16px;
+}
+.reserve-title{font-size:16.5px;font-weight:800;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.demo-tag{
+  font-size:9.5px;font-weight:800;letter-spacing:1.4px;color:var(--gold-soft);
+  border:1px solid rgba(232,184,75,.5);border-radius:6px;padding:3px 7px;
+}
+.reserve-amounts{display:flex;gap:12px;margin-top:13px}
+.reserve-amounts>div{flex:1;background:rgba(0,0,0,.25);border-radius:12px;padding:11px 13px}
+.reserve-note{color:var(--muted);font-size:12.5px;line-height:1.55;margin-top:12px}
+.unlock-row{padding:9px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.unlock-row:last-of-type{border-bottom:none}
+.unlock-main{display:flex;justify-content:space-between;gap:10px;font-size:13.5px}
+.unlock-main b{font-weight:700}
+.unlock-main span{color:var(--muted);font-size:12px;white-space:nowrap}
+.unlock-empty{color:var(--muted);font-size:13px;padding:6px 0 2px}
+.sim-btn{margin-top:16px;background:linear-gradient(180deg,#c99b2e,#8a6410);box-shadow:0 10px 22px rgba(146,106,16,.3)}
+#simVaultBtn{margin-top:10px}
+#simVaultBtn:disabled{opacity:.55;box-shadow:none;cursor:default}
+
+/* ── grail vault: profit zone + box gate ─── */
+.profit-pill{
+  display:inline-block;margin-top:3px;font-size:8.5px;font-weight:900;letter-spacing:.8px;
+  color:#231a02;background:linear-gradient(180deg,var(--gold-soft),var(--gold));
+  border-radius:99px;padding:2.5px 7px;white-space:nowrap;
+}
+.btn-buy.locked{background:#232f42;color:#7186a0;box-shadow:none;cursor:not-allowed}
+.slide-lock{
+  width:100%;margin-top:18px;text-align:left;
+  background:var(--panel);border:1px solid rgba(232,184,75,.35);border-radius:14px;padding:13px 14px;
+}
+.gate-note{
+  grid-column:1/-1;background:rgba(232,184,75,.07);
+  border:1px solid rgba(232,184,75,.4);border-radius:14px;padding:13px 14px;
+}
+
+</style>
+</head>
+<body>
+<div class="phone">
+
+  <!-- ══════════ TOP BAR ══════════ -->
+  <header class="topbar">
+    <button class="icon-btn" aria-label="Menu">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="15" y2="17"/></svg>
+    </button>
+    <div class="topbar-title">WatchBox</div>
+    <div class="limited-badge" aria-label="Limited">
+      <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M12 2 L20 9 L12 22 L4 9 Z"/><path d="M4 9 L20 9 M12 2 L8.5 9 L12 22 L15.5 9" fill="none" stroke="rgba(5,8,13,.55)" stroke-width="1.1"/></svg>
+      <span>LIMITED</span>
+    </div>
+    <button class="wallet-pill" id="walletPill" aria-label="Wallet — tap to top up">
+      <span class="wallet-amount" id="walletAmount">$50.00</span>
+      <span class="wallet-plus">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      </span>
+    </button>
+  </header>
+
+  <!-- ══════════ VIEWS ══════════ -->
+  <main class="views">
+
+    <!-- BOXES -->
+    <section class="view active" id="view-boxes">
+      <div class="carousel" id="carousel"><!-- slides injected by JS --></div>
+      <div class="dots" id="carouselDots"></div>
+      <div class="swipe-hint">Swipe or use the arrows to browse boxes</div>
+
+      <!-- LIVE PULLS FEED (simulated) -->
+      <div class="feed-wrap">
+        <div class="feed-head">
+          <span class="feed-dot"></span> LIVE PULLS
+          <span class="feed-sim">simulated demo activity</span>
+        </div>
+        <div id="liveFeed"></div>
+      </div>
+    </section>
+
+    <!-- SHOWROOM -->
+    <section class="view" id="view-showroom">
+      <h2 class="view-title">Showroom</h2>
+      <p class="view-sub">The chase watches for each box. Locked watches are <strong>not</strong> in the odds table and don't count toward Max Pull until the house reserve unlocks them.</p>
+      <div class="chips" id="showroomChips"></div>
+      <div class="card-grid" id="showroomGrid"></div>
+    </section>
+
+    <!-- COLLECTION -->
+    <section class="view" id="view-collection">
+      <h2 class="view-title">Collection</h2>
+      <div class="collection-summary">
+        <div>
+          <div class="summary-label">Total collection value</div>
+          <div class="summary-value" id="collectionTotal">$0.00</div>
+        </div>
+        <div>
+          <div class="summary-label">Watches owned</div>
+          <div class="summary-value" id="collectionCount">0</div>
+        </div>
+      </div>
+      <div class="card-grid" id="collectionGrid"></div>
+      <p class="empty-note" id="collectionEmpty">Nothing here yet. Open a box to start your collection.</p>
+    </section>
+
+    <!-- REWARDS -->
+    <section class="view" id="view-rewards">
+      <h2 class="view-title">Rewards</h2>
+      <p class="view-sub">Earn <strong>10 points</strong> for every box you open.</p>
+      <div class="rewards-card">
+        <div class="rewards-points"><span id="pointsValue">0</span><small> points</small></div>
+        <div class="progress-track"><div class="progress-fill" id="pointsProgress"></div></div>
+        <div class="progress-label" id="pointsLabel">0 / 100 points to a free Bronze Box</div>
+        <div class="reward-prize">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" x2="18" y2="4"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 0 1 0 5"/></svg>
+          <span>Reward: 1 × Bronze Box (free open)</span>
+        </div>
+        <button class="btn-primary" id="claimRewardBtn" disabled>Claim free Bronze Box</button>
+      </div>
+      <p class="fine-print">Points never expire in this demo. Claiming starts a free Bronze Box opening right away.</p>
+    </section>
+
+    <!-- ACCOUNT -->
+    <section class="view" id="view-account">
+      <h2 class="view-title">Account</h2>
+      <div class="profile-card">
+        <div class="avatar">W</div>
+        <div>
+          <div class="profile-name">Demo Collector</div>
+          <div class="profile-sub">Guest demo profile · WatchBox club</div>
+        </div>
+      </div>
+      <div class="reserve-panel">
+        <h3 class="reserve-title">House Reserve <span class="demo-tag">DEMO / ADMIN VIEW</span></h3>
+        <div class="reserve-amounts">
+          <div>
+            <div class="summary-label">Current reserve</div>
+            <div class="summary-value" id="reserveAmount">$0.00</div>
+          </div>
+          <div>
+            <div class="summary-label">Buyback floor (protected)</div>
+            <div class="summary-value" id="reserveFloor">$250.00</div>
+          </div>
+        </div>
+        <p class="reserve-note">The reserve grows by the house margin on every open — box price minus the pulled watch's value (a pull worth more than the box draws the reserve down, never below $0). A locked chase watch unlocks automatically when the reserve can pay its sourcing cost and still leave the $250 buyback floor untouched.</p>
+        <div class="sheet-label">Next unlocks</div>
+        <div id="nextUnlockList"></div>
+        <button class="btn-primary sim-btn" id="simBtn">Simulate 25 customer opens</button>
+        <button class="btn-primary sim-btn" id="simVaultBtn">Simulate opens until the Vault unlocks</button>
+        <p class="fine-print" id="simSummary">Simulated opens use the same odds and margin math, but never touch your wallet or collection.</p>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-box"><div class="stat-num" id="statOpens">0</div><div class="stat-label">Boxes opened</div></div>
+        <div class="stat-box"><div class="stat-num" id="statSpent">$0.00</div><div class="stat-label">Total spent</div></div>
+        <div class="stat-box"><div class="stat-num" id="statPulled">$0.00</div><div class="stat-label">Total pulled value</div></div>
+        <div class="stat-box"><div class="stat-num" id="statSold">$0.00</div><div class="stat-label">Sell-back earnings</div></div>
+      </div>
+      <h3 class="section-title">Open history</h3>
+      <div class="history-list" id="historyList"></div>
+      <p class="empty-note" id="historyEmpty">No opens yet.</p>
+      <button class="btn-ghost danger" id="resetBtn">Reset demo data</button>
+      <div class="legal-box">
+        <p><strong>18+ only.</strong> Mystery boxes involve chance. Only spend what you can afford to lose.</p>
+        <p><strong>Demo notice:</strong> This is a demonstration app. All funds are simulated, all watches are virtual, and no real payment is taken or payout made. Odds shown in each box's "What's inside" sheet are the exact odds used by the draw. The live pulls feed is simulated demo activity.</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- ══════════ BOTTOM NAV ══════════ -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" data-tab="boxes">
+      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M3 8 L12 4 L21 8 V16 L12 20 L3 16 Z"/><path d="M3 8 L12 12 L21 8"/><path d="M12 12 V20"/></svg>
+      <span>Boxes</span>
+    </button>
+    <button class="nav-item" data-tab="showroom">
+      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M4 10v10h16V10"/><path d="M2.5 6.5 4.5 3h15l2 3.5L20 10H4L2.5 6.5Z"/><path d="M9.5 20v-5h5v5"/></svg>
+      <span>Showroom</span>
+    </button>
+    <button class="nav-item" data-tab="collection">
+      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.5"/></svg>
+      <span>Collection</span>
+    </button>
+    <button class="nav-item" data-tab="rewards">
+      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 0 1 0 5"/></svg>
+      <span>Rewards</span>
+    </button>
+    <button class="nav-item" data-tab="account">
+      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c1.4-3.4 4.2-5 7.5-5s6.1 1.6 7.5 5"/></svg>
+      <span>Account</span>
+    </button>
+  </nav>
+
+  <!-- ══════════ TOP-UP MODAL ══════════ -->
+  <div class="modal-backdrop" id="topupModal" hidden>
+    <div class="modal-sheet">
+      <div class="sheet-handle"></div>
+      <h3>Add demo funds</h3>
+      <p class="sheet-sub">Simulated money only — no real payment is taken. This wallet exists just for the demo.</p>
+      <div class="topup-grid">
+        <button class="topup-btn" data-amount="50">+$50</button>
+        <button class="topup-btn" data-amount="100">+$100</button>
+        <button class="topup-btn" data-amount="250">+$250</button>
+        <button class="topup-btn" data-amount="500">+$500</button>
+        <button class="topup-btn" data-amount="1000">+$1,000</button>
+        <button class="topup-btn" data-amount="10000">+$10,000</button>
+      </div>
+      <button class="btn-ghost" data-close-modal>Cancel</button>
+    </div>
+  </div>
+
+  <!-- ══════════ ODDS / BOX-STYLE SHEET ══════════ -->
+  <div class="modal-backdrop" id="oddsModal" hidden>
+    <div class="modal-sheet odds-sheet">
+      <div class="sheet-handle"></div>
+      <div class="odds-head">
+        <h3 id="oddsTitle">What's inside</h3>
+        <button class="sheet-x" data-close-modal aria-label="Close">✕</button>
+      </div>
+      <p class="sheet-sub">Every box contains exactly <strong>1 watch</strong>. The table below is the exact table the draw uses for the selected style — displayed odds and draw odds are the same table.</p>
+      <div class="sheet-label">Box style</div>
+      <div id="styleOptions"></div>
+      <div class="sheet-label">Estimated Payout Odds</div>
+      <div class="band-list" id="bandList"></div>
+      <div class="minmax" id="oddsMinMax"></div>
+      <p class="guarantee" id="oddsGuarantee">All collectibles are backed by our buyback guarantee at 100% of Fair Market Value (FMV). Odds are calculated at the time of purchase.</p>
+      <button class="btn-primary" id="oddsApply">Apply</button>
+      <button class="btn-ghost" data-close-modal>Cancel</button>
+    </div>
+  </div>
+
+  <!-- ══════════ OPEN OVERLAY ══════════ -->
+  <div class="rip-overlay" id="openOverlay" hidden>
+    <button class="rip-close" id="openClose" aria-label="Close">✕</button>
+
+    <!-- Stage 1: sealed luxury box -->
+    <div class="rip-stage" id="openStageBox">
+      <h3 class="rip-title" id="openBoxName">Bronze Box</h3>
+      <p class="rip-hint" id="openHint">Drag upward on the lid — or tap the button — to open</p>
+      <div class="box-stage-wrap" id="boxStageWrap">
+        <div class="box-visual" id="boxVisual"></div>
+        <div class="lid-flap" id="lidFlap"><span>WATCHBOX</span></div>
+        <div class="sweep" id="sweep"></div>
+      </div>
+      <div class="tear-progress lid-progress"><div class="tear-progress-fill" id="openProgressFill"></div></div>
+      <button class="btn-primary rip-btn" id="openButton">Lift the lid</button>
+    </div>
+
+    <!-- Stage 2: revealed watch on a cushion -->
+    <div class="rip-stage" id="openStageCard" hidden>
+      <div class="rarity-banner" id="rarityBanner">RARE PULL!</div>
+      <div class="reveal-cushion">
+        <div class="reveal-slot" id="revealSlot"></div>
+      </div>
+      <p class="sell-note">Sell back instantly at 100% of Fair Market Value (FMV) — sell-back stays available in your Collection. Shipping is free and arrives within 2 weeks.</p>
+      <div class="reveal-actions">
+        <button class="btn-sell" id="revealSellBtn">Sell back</button>
+        <button class="btn-ship" id="revealShipBtn">Ship it to me</button>
+        <button class="btn-primary" id="revealKeepBtn">Keep in Collection</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- toast -->
+  <div class="toast" id="toast" hidden></div>
+</div>
+<script>
+'use strict';
+/* ════════════════════════════════════════════════════════════════════
+   WatchBox — demo luxury-watch mystery-box app. Simulated funds,
+   virtual watches, original invented models (no real brands).
+   HONESTY INVARIANT: the odds sheet renders computeActiveTable()'s
+   rows, and drawValue() draws from those exact same rows. Displayed
+   odds and draw odds are literally the same numbers.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* ── constants ─────────────────────────────────────────────────────── */
+const SELL_RATE = 1.0;            // sell-back pays 100% of FMV (matches the guarantee text)
+const BUYBACK_FLOOR = 250;        // $250 of reserve is untouchable (watch-scale)
+const POINTS_PER_OPEN = 10;
+const REWARD_POINTS = 100;        // 100 points = free Bronze Box
+const UNLOCK_BUFFER = 1.25;       // chase sourcing cost = value × 1.25
+const VALUE_SKEW = 2.2;           // within-band values skew toward the band floor
+const STORAGE_KEY = 'watchbox-demo-v1';
+
+const RARITY_ORDER = ['Common', 'Uncommon', 'Rare', 'Epic', 'Legendary', 'Grail'];
+const CHASE_TIERS = ['Epic', 'Legendary', 'Grail'];
+const BAND_COLORS = ['#8fa3b8', '#38bdf8', '#818cf8', '#e879f9', '#f5d67b'];
+
+const STYLES = {
+  normal: { name: 'Normal', desc: 'Reliable pulls with results close to the average value of a box.' },
+  high:   { name: 'High',   desc: 'Higher volatility — more weight on the lowest and highest payouts, less in the middle. Bigger swings, bigger chases.' }
+};
+
+/* ── original watches (invented models — no real brands) ───────────── */
+/* shape: round | square | tonneau · metal: steel|gold|rose|black|platinum */
+/* strap: steel|gold|leather-black|leather-brown|rubber|canvas              */
+const WATCHES = {
+  Common: [
+    { name: 'Metro Slim Quartz',   desc: '38mm steel · quartz · white dial',        shape: 'round',   metal: 'steel',    dial: '#edf1f5', strap: 'leather-black' },
+    { name: 'Harbor Field',        desc: '40mm steel · quartz · field green dial',  shape: 'round',   metal: 'steel',    dial: '#2e4a38', strap: 'canvas' },
+    { name: 'Vista Chrono Lite',   desc: '42mm steel-tone · quartz chrono · blue dial', shape: 'round', metal: 'steel',  dial: '#274b73', strap: 'steel', sub: true },
+    { name: 'Solstice Dress',      desc: '36mm gold-tone · quartz · champagne dial', shape: 'round',  metal: 'gold',     dial: '#e8d9ae', strap: 'leather-brown' },
+    { name: 'Drift Nomad',         desc: '40mm steel · quartz · cream dial',        shape: 'round',   metal: 'steel',    dial: '#e9e2cf', strap: 'canvas' }
+  ],
+  Uncommon: [
+    { name: 'Meridian Field Chrono', desc: '41mm steel · automatic chrono · black dial', shape: 'round', metal: 'steel', dial: '#14181d', strap: 'steel', sub: true },
+    { name: 'Trailhead GMT',         desc: '40mm steel · automatic GMT · navy dial',     shape: 'round', metal: 'steel', dial: '#1d3355', strap: 'steel' },
+    { name: 'Cascade Diver 200M',    desc: '42mm steel · automatic · teal dial',         shape: 'round', metal: 'steel', dial: '#0f5e63', strap: 'rubber' },
+    { name: 'Atelier Moonphase',     desc: '39mm steel · automatic moonphase · silver dial', shape: 'square', metal: 'steel', dial: '#dfe5ea', strap: 'leather-black' },
+    { name: 'Ridgeback Pilot',       desc: '43mm titanium · automatic · charcoal dial',  shape: 'round', metal: 'steel', dial: '#2b2f36', strap: 'leather-brown' }
+  ],
+  Rare: [
+    { name: 'Abyssal Diver 300M',    desc: '43mm steel · automatic · wave-black dial',   shape: 'round', metal: 'steel', dial: '#10151c', strap: 'rubber' },
+    { name: 'Velocity Racing Chrono', desc: '41mm steel · automatic chrono · panda dial', shape: 'round', metal: 'steel', dial: '#eceff2', strap: 'steel', sub: true },
+    { name: 'Nordlys Skeleton',      desc: '40mm blackened steel · automatic skeleton · smoke dial', shape: 'round', metal: 'black', dial: '#3a4150', strap: 'leather-black' },
+    { name: 'Heritage Railmaster',   desc: '38mm steel · automatic · railway white dial', shape: 'round', metal: 'steel', dial: '#f2f0e9', strap: 'leather-brown' },
+    { name: 'Cobalt GMT',            desc: '40mm steel · automatic GMT · cobalt dial',   shape: 'round', metal: 'steel', dial: '#16283f', strap: 'steel' }
+  ],
+  Epic: [
+    { name: 'Sovereign Chronograph', desc: '42mm steel · in-house chrono · ice-blue dial', shape: 'round', metal: 'steel', dial: '#a8d4ea', strap: 'steel', sub: true },
+    { name: 'Deepsea Abyss 1000M',   desc: '44mm titanium · automatic · gradient abyss dial', shape: 'round', metal: 'black', dial: '#0d2f52', strap: 'rubber' },
+    { name: 'Aurelian Annual Calendar', desc: '41mm rose gold · annual calendar · cognac dial', shape: 'round', metal: 'rose', dial: '#8a5a33', strap: 'leather-brown' },
+    { name: 'Vortex Tourbillon',     desc: '42mm steel · manual tourbillon · open-heart dial', shape: 'round', metal: 'steel', dial: '#232936', strap: 'leather-black' },
+    { name: 'Obsidian Worldtimer',   desc: '43mm black ceramic · worldtimer · matte black dial', shape: 'round', metal: 'black', dial: '#15171b', strap: 'rubber' }
+  ],
+  Legendary: [
+    { name: 'Celestia Perpetual',    desc: '41mm platinum · perpetual calendar · meteorite dial', shape: 'round', metal: 'platinum', dial: '#565e6a', strap: 'steel' },
+    { name: 'Sovereign Minute Repeater', desc: '40mm yellow gold · minute repeater · enamel dial', shape: 'round', metal: 'gold', dial: '#f4efe4', strap: 'leather-brown' },
+    { name: 'Glacier Ice Chrono',    desc: '42mm white gold · chronograph · glacial blue dial', shape: 'round', metal: 'platinum', dial: '#cfe8f5', strap: 'steel', sub: true },
+    { name: 'Imperial Jubilee',      desc: '39mm yellow gold · automatic · champagne dial', shape: 'round', metal: 'gold', dial: '#e8d9ae', strap: 'gold' }
+  ],
+  Grail: [
+    { name: 'Sovereign Tourbillon Nº 1', desc: '44mm platinum · tourbillon · diamond-set bezel', shape: 'round', metal: 'platinum', dial: '#1c2230', strap: 'leather-black' },
+    { name: 'Eternity Celestial',    desc: '45mm rose gold · celestial sky chart · midnight dial', shape: 'round', metal: 'rose', dial: '#101a33', strap: 'leather-brown' },
+    { name: 'Aurora Borealis Grail', desc: '43mm white gold · grand feu enamel · aurora dial', shape: 'tonneau', metal: 'platinum', dial: '#173d33', strap: 'leather-black' }
+  ]
+};
+
+/* ── boxes ─────────────────────────────────────────────────────────── */
+/* bands: [lo, hi, pct] per style — each style sums to exactly 100.    */
+/* tiers: value range per rarity inside this box.                      */
+const BOXES = [
+  {
+    id: 'bronze', name: 'Bronze Box', short: 'BRONZE',
+    price: 50, min: 10, max: 500, trim: '#d08a4a', styleNote: 'Normal',
+    tiers: { Common: [10, 25], Uncommon: [25, 60], Rare: [60, 150], Epic: [150, 280], Legendary: [280, 420], Grail: [420, 500] },
+    bands: {
+      normal: [[10, 50, 86], [50, 120, 9.5], [120, 250, 3], [250, 400, 1], [400, 500, 0.5]],
+      high:   [[10, 50, 90], [50, 120, 6], [120, 250, 2.2], [250, 400, 1], [400, 500, 0.8]]
+    }
+  },
+  {
+    id: 'silver', name: 'Silver Box', short: 'SILVER',
+    price: 100, min: 25, max: 1500, trim: '#c3cedb', styleNote: 'Normal',
+    tiers: { Common: [25, 60], Uncommon: [60, 150], Rare: [150, 400], Epic: [400, 800], Legendary: [800, 1250], Grail: [1250, 1500] },
+    bands: {
+      normal: [[25, 100, 86], [100, 250, 9.5], [250, 600, 3], [600, 1100, 1], [1100, 1500, 0.5]],
+      high:   [[25, 100, 90], [100, 250, 6], [250, 600, 2.2], [600, 1100, 1], [1100, 1500, 0.8]]
+    }
+  },
+  {
+    id: 'gold', name: 'Gold Box', short: 'GOLD',
+    price: 200, min: 50, max: 4000, trim: '#f5b921', styleNote: 'Foil',
+    tiers: { Common: [50, 120], Uncommon: [120, 300], Rare: [300, 900], Epic: [900, 2000], Legendary: [2000, 3250], Grail: [3250, 4000] },
+    bands: {
+      normal: [[50, 200, 86], [200, 500, 9.5], [500, 1200, 3], [1200, 2800, 1], [2800, 4000, 0.5]],
+      high:   [[50, 200, 90], [200, 500, 6], [500, 1200, 2.2], [1200, 2800, 1], [2800, 4000, 0.8]]
+    }
+  },
+  {
+    id: 'ruby', name: 'Ruby Box', short: 'RUBY',
+    price: 250, min: 75, max: 8000, trim: '#f0435f', styleNote: 'Foil',
+    tiers: { Common: [75, 180], Uncommon: [180, 450], Rare: [450, 1500], Epic: [1500, 4000], Legendary: [4000, 6500], Grail: [6500, 8000] },
+    bands: {
+      normal: [[75, 250, 88], [250, 600, 8], [600, 2000, 2.6], [2000, 5000, 0.9], [5000, 8000, 0.5]],
+      high:   [[75, 250, 91], [250, 600, 5.4], [600, 2000, 2], [2000, 5000, 0.9], [5000, 8000, 0.7]]
+    }
+  },
+  {
+    id: 'icy', name: 'Icy Box', short: 'ICY',
+    price: 500, min: 150, max: 50000, trim: '#7dd3fc', styleNote: 'Limited',
+    tiers: { Common: [150, 400], Uncommon: [400, 1000], Rare: [1000, 4000], Epic: [4000, 15000], Legendary: [15000, 35000], Grail: [35000, 50000] },
+    bands: {
+      normal: [[150, 500, 90], [500, 1500, 7.5], [1500, 6000, 1.8], [6000, 20000, 0.5], [20000, 50000, 0.2]],
+      high:   [[150, 500, 93], [500, 1500, 5], [1500, 6000, 1.3], [6000, 20000, 0.45], [20000, 50000, 0.25]]
+    }
+  },
+  {
+    /* High-roller tier. RESERVE-GATED: not purchasable until the house  */
+    /* reserve covers gateThreshold (max pull × 1.25) + the buyback floor. */
+    /* Bands: exactly 14.3% (1 in 7) of pulls land above the $10,000 price */
+    /* in BOTH styles; High shifts weight to the extremes within each zone. */
+    id: 'grail', name: 'Grail Vault', short: 'GRAIL',
+    price: 10000, min: 5000, max: 30000, trim: '#f5d67b', styleNote: 'Limited',
+    gated: true, gateThreshold: 37500,
+    tiers: { Common: [5000, 7500], Uncommon: [7500, 10000], Rare: [10000, 15000], Epic: [15000, 20000], Legendary: [20000, 26000], Grail: [26000, 30000] },
+    bands: {
+      normal: [[5000, 7500, 51.2], [7500, 10000, 34.5], [10000, 15000, 10.0], [15000, 22000, 3.1], [22000, 30000, 1.2]],
+      high:   [[5000, 7500, 57], [7500, 10000, 28.7], [10000, 15000, 8.6], [15000, 22000, 3.5], [22000, 30000, 2.2]]
+    }
+  }
+];
+const boxById = id => BOXES.find(b => b.id === id);
+
+/* ── chase watches (locked until the reserve sources them) ─────────── */
+function buildChase() {
+  const out = [];
+  for (const box of BOXES) {
+    for (const tier of CHASE_TIERS) {
+      const top = box.tiers[tier][1];
+      for (const w of WATCHES[tier]) {
+        out.push({
+          id: box.id + '|' + w.name,
+          boxId: box.id, boxName: box.name,
+          watch: w.name, tier,
+          value: top,                                // headline FMV = top of its tier range in this box
+          threshold: Math.ceil(top * UNLOCK_BUFFER)  // sourcing cost
+        });
+      }
+    }
+  }
+  return out;
+}
+const CHASE = buildChase();
+const chaseById = id => CHASE.find(c => c.id === id);
+
+/* ── active pool / odds computation ────────────────────────────────── */
+/* Highest drawable value in a box: top of the highest tier that has   */
+/* at least one active watch. Base tiers are always active; chase      */
+/* tiers activate watch-by-watch, in ascending threshold order.        */
+function activeMaxFor(box, unlocked) {
+  let top = box.tiers.Rare[1];
+  for (const tier of CHASE_TIERS) {
+    const anyActive = CHASE.some(c => c.boxId === box.id && c.tier === tier && unlocked.has(c.id));
+    if (!anyActive) break;
+    top = box.tiers[tier][1];
+  }
+  return top;
+}
+
+/* The ONE odds table used by both the sheet and the draw: base bands  */
+/* for the style, clipped at the active max, renormalized to 100.0.   */
+function computeActiveTable(box, styleKey, unlocked) {
+  const aMax = activeMaxFor(box, unlocked);
+  const raw = box.bands[styleKey]
+    .filter(b => b[0] < aMax)
+    .map(b => [b[0], Math.min(b[1], aMax), b[2]]);
+  const sum = raw.reduce((s, b) => s + b[2], 0);
+  const rows = raw.map(b => ({ lo: b[0], hi: b[1], pct: Math.round((b[2] / sum) * 1000) / 10 }));
+  const drift = Math.round((100 - rows.reduce((s, r) => s + r.pct, 0)) * 10) / 10;
+  if (rows.length && drift !== 0) {
+    let li = 0;
+    rows.forEach((r, i) => { if (r.pct > rows[li].pct) li = i; });
+    rows[li].pct = Math.round((rows[li].pct + drift) * 10) / 10;
+  }
+  return { rows, activeMax: aMax };
+}
+
+/* Draw a value from the exact rows shown on the odds sheet. Bands    */
+/* after the first start one cent above their floor, so a pulled      */
+/* value always belongs to exactly the band it was drawn from.        */
+function drawValue(box, styleKey, unlocked, rng) {
+  rng = rng || Math.random;
+  const { rows } = computeActiveTable(box, styleKey, unlocked);
+  let roll = rng() * 100, acc = 0, bi = rows.length - 1;
+  for (let i = 0; i < rows.length; i++) { acc += rows[i].pct; if (roll < acc) { bi = i; break; } }
+  const band = rows[bi];
+  const loEff = bi === 0 ? band.lo : Math.min(band.hi, band.lo + 0.01);
+  const t = Math.pow(rng(), VALUE_SKEW);
+  const v = loEff + (band.hi - loEff) * t;
+  return Math.min(band.hi, Math.max(loEff, Math.round(v * 100) / 100));
+}
+
+function rarityForValue(box, value) {
+  for (const tier of RARITY_ORDER) {
+    if (value <= box.tiers[tier][1]) return tier;
+  }
+  return 'Grail';
+}
+
+function watchPoolFor(box, tier, unlocked) {
+  if (!CHASE_TIERS.includes(tier)) return WATCHES[tier].slice();
+  return WATCHES[tier].filter(w => unlocked.has(box.id + '|' + w.name));
+}
+
+/* ── reserve + unlocks (pure — unit-tested) ────────────────────────── */
+/* A gated box unlocks permanently the moment the reserve covers its  */
+/* gate (max pull × 1.25) AND still leaves the buyback floor intact.  */
+/* The gate is coverage, not a purchase — the reserve is NOT spent.   */
+/* Gates are checked before chase spending so an unrelated unlock in  */
+/* the same pass cannot starve a gate the reserve already covers.     */
+function boxLocked(box, unlockedBoxesArr) {
+  return !!box.gated && !(unlockedBoxesArr || []).includes(box.id);
+}
+
+function processUnlocks(reserve, unlockedArr, unlockedBoxesArr) {
+  const unlocked = new Set(unlockedArr);
+  const unlockedBoxes = new Set(unlockedBoxesArr || []);
+  const newly = [];
+  const newlyBoxes = [];
+  for (const box of BOXES) {
+    if (boxLocked(box, [...unlockedBoxes]) && reserve - box.gateThreshold >= BUYBACK_FLOOR) {
+      unlockedBoxes.add(box.id);
+      newlyBoxes.push(box);
+    }
+  }
+  /* Unlock the cheapest eligible chase watch while the reserve can pay */
+  /* its sourcing cost AND still leave the buyback floor untouched.     */
+  for (;;) {
+    const eligible = CHASE
+      .filter(c => !unlocked.has(c.id) && reserve - c.threshold >= BUYBACK_FLOOR)
+      .sort((a, b) => a.threshold - b.threshold || a.value - b.value);
+    if (!eligible.length) break;
+    const c = eligible[0];
+    reserve = Math.round((reserve - c.threshold) * 100) / 100;
+    unlocked.add(c.id);
+    newly.push(c);
+  }
+  return { reserve, unlocked: [...unlocked], unlockedBoxes: [...unlockedBoxes], newly, newlyBoxes };
+}
+
+/* House margin for one open: positive margin feeds the reserve; a    */
+/* pull above the box price draws it down, never below $0.            */
+function applyMargin(reserve, unlockedArr, price, pulledValue, unlockedBoxesArr) {
+  const next = Math.max(0, Math.round((reserve + (price - pulledValue)) * 100) / 100);
+  return processUnlocks(next, unlockedArr, unlockedBoxesArr);
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = {
+    BOXES, WATCHES, CHASE, STYLES, BUYBACK_FLOOR, SELL_RATE,
+    computeActiveTable, drawValue, rarityForValue, watchPoolFor,
+    activeMaxFor, processUnlocks, applyMargin, boxById, chaseById, boxLocked
+  };
+}
+
+/* ═══════════════════════ UI layer (browser only) ═══════════════════════ */
+if (typeof document !== 'undefined') {
+
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const fmt$ = v => '$' + v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const fmtBand = v => '$' + (Number.isInteger(v) ? v.toLocaleString('en-US') : v.toFixed(2));
+const round2 = v => Math.round(v * 100) / 100;
+let svgUid = 0;
+
+/* ── state ─────────────────────────────────────────────────────────── */
+function defaultState() {
+  return {
+    balance: 50.00, points: 0,
+    totalOpens: 0, totalSpent: 0, totalPulled: 0, totalSoldBack: 0,
+    reserve: 0, unlockedChase: [], unlockedBoxes: [], simOpens: 0, lastSim: null,
+    boxStyles: { bronze: 'normal', silver: 'normal', gold: 'normal', ruby: 'normal', icy: 'normal', grail: 'normal' },
+    collection: [], history: []
+  };
+}
+let state = defaultState();
+try {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (raw) state = Object.assign(defaultState(), JSON.parse(raw));
+} catch (e) { /* fresh demo state */ }
+state.boxStyles = Object.assign(defaultState().boxStyles, state.boxStyles || {});
+if (!Array.isArray(state.unlockedBoxes)) state.unlockedBoxes = [];
+function save() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {} }
+const unlockedSet = () => new Set(state.unlockedChase);
+
+/* ── toast queue ───────────────────────────────────────────────────── */
+const toastQ = [];
+let toastBusy = false;
+function toast(msg) { toastQ.push(msg); if (!toastBusy) nextToast(); }
+function nextToast() {
+  const el = $('#toast');
+  const msg = toastQ.shift();
+  if (msg === undefined) { toastBusy = false; el.hidden = true; return; }
+  toastBusy = true;
+  el.textContent = msg;
+  el.hidden = false;
+  setTimeout(() => { el.hidden = true; setTimeout(nextToast, 180); }, 2600);
+}
+
+/* ── SVG art: watches ──────────────────────────────────────────────── */
+const METALS = {
+  steel:    ['#f4f7fa', '#8d99a8', '#dde4ec'],
+  gold:     ['#f9e38b', '#c9962e', '#f5d67b'],
+  rose:     ['#f6c39a', '#b87347', '#f0b98c'],
+  black:    ['#4a5058', '#14171b', '#33383f'],
+  platinum: ['#ffffff', '#aeb9c4', '#eef2f6']
+};
+const STRAPS = {
+  'leather-black': { fill: '#232329', stitch: 'rgba(255,255,255,.4)' },
+  'leather-brown': { fill: '#6b4226', stitch: 'rgba(255,235,200,.5)' },
+  'rubber':        { fill: '#1b2430', stitch: null },
+  'canvas':        { fill: '#57604c', stitch: 'rgba(240,240,220,.45)' }
+};
+function lum(hex) {
+  const n = parseInt(hex.slice(1), 16);
+  return (0.299 * (n >> 16) + 0.587 * ((n >> 8) & 255) + 0.114 * (n & 255)) / 255;
+}
+function watchSVG(w, tier) {
+  const id = 'wg' + (++svgUid);
+  const M = METALS[w.metal];
+  const metal = `url(#${id}m)`;
+  const defs = `<defs>
+    <linearGradient id="${id}m" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="${M[0]}"/><stop offset=".5" stop-color="${M[1]}"/><stop offset="1" stop-color="${M[2]}"/>
+    </linearGradient>
+    <radialGradient id="${id}d" cx=".38" cy=".32" r=".95">
+      <stop offset="0" stop-color="${w.dial}"/><stop offset="1" stop-color="${w.dial}" stop-opacity=".72"/>
+    </radialGradient>
+  </defs>`;
+  /* strap segments (top & bottom) */
+  const bracelet = (w.strap === 'steel' || w.strap === 'gold');
+  const strapFill = bracelet ? metal : STRAPS[w.strap].fill;
+  let strap = `<path d="M86 0 L114 0 L110 46 L90 46 Z" fill="${strapFill}"/>
+               <path d="M90 104 L110 104 L114 150 L86 150 Z" fill="${strapFill}"/>`;
+  if (bracelet) {
+    for (let y = 8; y < 44; y += 9) strap += `<line x1="88" y1="${y}" x2="112" y2="${y}" stroke="rgba(0,0,0,.28)" stroke-width="1.6"/>`;
+    for (let y = 110; y < 146; y += 9) strap += `<line x1="88" y1="${y}" x2="112" y2="${y}" stroke="rgba(0,0,0,.28)" stroke-width="1.6"/>`;
+  } else if (STRAPS[w.strap].stitch) {
+    const st = STRAPS[w.strap].stitch;
+    strap += `<line x1="91" y1="3" x2="94" y2="43" stroke="${st}" stroke-width="1.3" stroke-dasharray="3.5 3"/>
+              <line x1="109" y1="3" x2="106" y2="43" stroke="${st}" stroke-width="1.3" stroke-dasharray="3.5 3"/>
+              <line x1="94" y1="107" x2="91" y2="147" stroke="${st}" stroke-width="1.3" stroke-dasharray="3.5 3"/>
+              <line x1="106" y1="107" x2="109" y2="147" stroke="${st}" stroke-width="1.3" stroke-dasharray="3.5 3"/>`;
+  } else {
+    for (let y = 10; y < 42; y += 8) strap += `<line x1="89" y1="${y}" x2="111" y2="${y}" stroke="rgba(255,255,255,.09)" stroke-width="2.4"/>`;
+    for (let y = 110; y < 144; y += 8) strap += `<line x1="89" y1="${y}" x2="111" y2="${y}" stroke="rgba(255,255,255,.09)" stroke-width="2.4"/>`;
+  }
+  /* case + dial by shape, centred on (100,75) */
+  const ink = lum(w.dial) > 0.55 ? '#20242a' : '#e8eef4';
+  let caseSVG = '', face = '';
+  if (w.shape === 'square') {
+    caseSVG = `<rect x="61" y="36" width="78" height="78" rx="13" fill="${metal}" stroke="rgba(0,0,0,.3)" stroke-width="1.5"/>
+               <rect x="69" y="44" width="62" height="62" rx="9" fill="url(#${id}d)" stroke="rgba(0,0,0,.35)"/>`;
+    face = 'sq';
+  } else if (w.shape === 'tonneau') {
+    caseSVG = `<rect x="65" y="33" width="70" height="84" rx="26" fill="${metal}" stroke="rgba(0,0,0,.3)" stroke-width="1.5"/>
+               <rect x="73" y="41" width="54" height="68" rx="19" fill="url(#${id}d)" stroke="rgba(0,0,0,.35)"/>`;
+    face = 'sq';
+  } else {
+    caseSVG = `<circle cx="100" cy="75" r="39" fill="${metal}" stroke="rgba(0,0,0,.3)" stroke-width="1.5"/>
+               <circle cx="100" cy="75" r="34" fill="rgba(10,13,18,.85)"/>
+               <circle cx="100" cy="75" r="30" fill="url(#${id}d)" stroke="rgba(0,0,0,.3)"/>`;
+    face = 'rd';
+  }
+  /* crown */
+  caseSVG += `<rect x="140" y="70" width="7" height="10" rx="2.5" fill="${metal}" stroke="rgba(0,0,0,.3)"/>`;
+  /* markers */
+  let marks = '';
+  if (face === 'rd') {
+    for (let i = 0; i < 12; i++) {
+      const a = i * Math.PI / 6, big = i % 3 === 0;
+      const r1 = big ? 23.5 : 25.5, r2 = 28;
+      marks += `<line x1="${100 + r1 * Math.sin(a)}" y1="${75 - r1 * Math.cos(a)}" x2="${100 + r2 * Math.sin(a)}" y2="${75 - r2 * Math.cos(a)}" stroke="${ink}" stroke-width="${big ? 2.6 : 1.4}" opacity=".85"/>`;
+    }
+  } else {
+    marks = [[100, 50], [100, 100], [78, 75], [122, 75]].map(p =>
+      `<circle cx="${p[0]}" cy="${p[1]}" r="2.4" fill="${ink}" opacity=".85"/>`).join('');
+  }
+  /* hands at 10:10 */
+  const hand = (deg, len, wd) => {
+    const a = deg * Math.PI / 180;
+    return `<line x1="100" y1="75" x2="${100 + len * Math.sin(a)}" y2="${75 - len * Math.cos(a)}" stroke="${ink}" stroke-width="${wd}" stroke-linecap="round"/>`;
+  };
+  const sub = w.sub ? `<circle cx="100" cy="89" r="6" fill="none" stroke="${ink}" stroke-width="1.3" opacity=".75"/><line x1="100" y1="89" x2="103.5" y2="85.5" stroke="${ink}" stroke-width="1.2"/>` : '';
+  const brand = `<text x="100" y="63" text-anchor="middle" font-size="6.5" font-weight="800" letter-spacing="1.6" fill="${ink}" opacity=".65">WB</text>`;
+  /* icy sparkle on Legendary / Grail */
+  let sparkle = '';
+  if (tier === 'Legendary' || tier === 'Grail') {
+    const star = (x, y, s) => `<polygon points="${x},${y - s} ${x + s * 0.28},${y - s * 0.28} ${x + s},${y} ${x + s * 0.28},${y + s * 0.28} ${x},${y + s} ${x - s * 0.28},${y + s * 0.28} ${x - s},${y} ${x - s * 0.28},${y - s * 0.28}" fill="#eaf7ff"/>`;
+    sparkle = star(38, 26, 8) + star(166, 40, 6) + star(156, 122, 7) + star(30, 108, 5);
+  }
+  return `<svg viewBox="0 0 200 150" aria-hidden="true">${defs}<ellipse cx="100" cy="140" rx="58" ry="7" fill="rgba(0,0,0,.35)"/>${strap}${caseSVG}${marks}${sub}${brand}${hand(-58, 15, 3.6)}${hand(58, 22, 2.6)}<circle cx="100" cy="75" r="2.8" fill="${ink}"/>${sparkle}</svg>`;
+}
+
+/* ── SVG art: presentation box ─────────────────────────────────────── */
+function boxSVG(box) {
+  const p = box.id;
+  return `<svg viewBox="0 0 260 360" role="img" aria-label="${box.name}">
+  <defs>
+    <linearGradient id="bg${p}" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1a2434"/><stop offset=".55" stop-color="#0d1420"/><stop offset="1" stop-color="#070b12"/>
+    </linearGradient>
+    <linearGradient id="bm${p}" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f4f7fa"/><stop offset=".5" stop-color="#8d99a8"/><stop offset="1" stop-color="#dde4ec"/>
+    </linearGradient>
+  </defs>
+  <ellipse cx="130" cy="330" rx="96" ry="13" fill="rgba(0,0,0,.5)"/>
+  <rect x="33" y="98" width="194" height="218" rx="16" fill="url(#bg${p})" stroke="${box.trim}" stroke-width="1.6"/>
+  <rect x="33" y="72" width="194" height="50" rx="14" fill="#141e2e" stroke="${box.trim}" stroke-width="1.6"/>
+  <rect x="120" y="112" width="20" height="15" rx="3" fill="${box.trim}"/>
+  <ellipse cx="130" cy="228" rx="66" ry="42" fill="#131e2d" stroke="rgba(255,255,255,.08)"/>
+  <rect x="117" y="160" width="26" height="30" fill="url(#bm${p})" opacity=".9"/>
+  <rect x="117" y="266" width="26" height="30" fill="url(#bm${p})" opacity=".9"/>
+  <circle cx="130" cy="228" r="37" fill="url(#bm${p})"/>
+  <circle cx="130" cy="228" r="30" fill="#0e1622" stroke="${box.trim}" stroke-width="1.4"/>
+  <line x1="130" y1="228" x2="119" y2="217" stroke="#e8eef4" stroke-width="3.4" stroke-linecap="round"/>
+  <line x1="130" y1="228" x2="144" y2="220" stroke="#e8eef4" stroke-width="2.6" stroke-linecap="round"/>
+  <polygon points="130,138 139,150 130,162 121,150" fill="${box.trim}"/>
+  <text x="130" y="48" text-anchor="middle" font-size="17" font-weight="800" letter-spacing="4" fill="#eef4fa">WATCHBOX</text>
+  <text x="130" y="66" text-anchor="middle" font-size="9.5" font-weight="700" letter-spacing="5" fill="${box.trim}">HAUTE COLLECTIBLES</text>
+  <text x="130" y="298" text-anchor="middle" font-size="15" font-weight="800" letter-spacing="2.5" fill="#eef4fa">${box.short} BOX</text>
+  <text x="130" y="352" text-anchor="middle" font-size="8.5" font-weight="700" letter-spacing="3" fill="rgba(238,244,250,.5)">1 WATCH INSIDE</text>
+</svg>`;
+}
+
+/* ── watch card element ────────────────────────────────────────────── */
+function watchByName(name) {
+  for (const tier of RARITY_ORDER) {
+    const w = WATCHES[tier].find(x => x.name === name);
+    if (w) return w;
+  }
+  return WATCHES.Common[0];
+}
+function cardHTML(watch, rarity, valueHTML, extraHTML) {
+  const holo = (rarity === 'Legendary' || rarity === 'Grail') ? ' holo' : '';
+  return `<article class="wcard rarity-${rarity.toLowerCase()}${holo}">
+    <div class="wcard-art">${watchSVG(watch, rarity)}</div>
+    <div class="wcard-body">
+      <div class="wcard-name">${watch.name}</div>
+      <div class="wcard-type">${watch.desc}</div>
+      <span class="rarity-pill">${rarity.toUpperCase()}</span>
+      ${valueHTML || ''}
+      ${extraHTML || ''}
+    </div>
+  </article>`;
+}
+const valueHTML = v => `<div class="wcard-value"><small>FAIR MARKET VALUE</small>${fmt$(v)}</div>`;
+
+/* ── modals ────────────────────────────────────────────────────────── */
+function openModal(el) { el.hidden = false; }
+function closeModal(el) { el.hidden = true; }
+$$('.modal-backdrop').forEach(bd => {
+  bd.addEventListener('click', e => { if (e.target === bd) closeModal(bd); });
+});
+$$('[data-close-modal]').forEach(btn => {
+  btn.addEventListener('click', () => closeModal(btn.closest('.modal-backdrop')));
+});
+
+/* ── wallet / top-up ───────────────────────────────────────────────── */
+function renderWallet() { $('#walletAmount').textContent = fmt$(state.balance); }
+$('#walletPill').addEventListener('click', () => openModal($('#topupModal')));
+$$('.topup-btn').forEach(btn => btn.addEventListener('click', () => {
+  const amt = Number(btn.dataset.amount);
+  state.balance = round2(state.balance + amt);
+  save(); renderWallet(); closeModal($('#topupModal'));
+  toast(`Added ${fmt$(amt)} demo funds`);
+}));
+
+/* ── tabs ──────────────────────────────────────────────────────────── */
+$$('.nav-item').forEach(btn => btn.addEventListener('click', () => {
+  $$('.nav-item').forEach(b => b.classList.toggle('active', b === btn));
+  $$('.view').forEach(v => v.classList.toggle('active', v.id === 'view-' + btn.dataset.tab));
+  $('.views').scrollTop = 0;
+}));
+function goTab(tab) { $(`.nav-item[data-tab="${tab}"]`).click(); }
+
+/* ── boxes carousel ────────────────────────────────────────────────── */
+let currentSlide = 0;
+function slideHTML(box) {
+  const aMax = activeMaxFor(box, unlockedSet());
+  const styleKey = state.boxStyles[box.id];
+  const locked = boxLocked(box, state.unlockedBoxes);
+  const limited = (box.id === 'icy' || box.gated) ? `<div class="slide-limited">
+      <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M12 2 L20 9 L12 22 L4 9 Z"/></svg> LIMITED
+    </div>` : '';
+  const gateNeed = box.gated ? box.gateThreshold + BUYBACK_FLOOR : 0;
+  const buyArea = locked ? `
+    <div class="slide-lock">
+      <div class="lock-line">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+        Unlocks when the house reserve reaches ${fmtBand(box.gateThreshold)}
+      </div>
+      <div class="pb-track"><div class="pb-fill" style="width:${Math.min(100, (state.reserve / gateNeed) * 100)}%"></div></div>
+      <div class="lock-sub">Reserve ${fmt$(state.reserve)} — funded by every box opened. The reserve must cover the ${fmtBand(box.max)} max pull × 1.25 (${fmtBand(box.gateThreshold)}) and still leave the ${fmtBand(BUYBACK_FLOOR)} buyback floor, so ${fmtBand(gateNeed)} in practice.</div>
+    </div>
+    <button class="btn-buy locked" disabled>Locked</button>`
+    : `<button class="btn-buy" data-buy="${box.id}">Buy for ${fmtBand(box.price)}</button>`;
+  return `<div class="slide" data-box="${box.id}">
+    <div class="pack-visual">${boxSVG(box)}${limited}</div>
+    <div class="pack-name">${box.name}</div>
+    <button class="whats-inside" data-odds="${box.id}">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-6.5 10-6.5S22 12 22 12s-3.5 6.5-10 6.5S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+      What's inside
+    </button>
+    <div class="pack-stats">
+      <div class="divider-row"><span>Max Pull</span></div>
+      <div class="maxpull-val" data-maxpull="${box.id}">${fmtBand(aMax)}</div>
+      <div class="stat-row">
+        <div class="stat-cell"><label>Min Value</label><div class="val">${fmtBand(box.min)}</div></div>
+        <div class="stat-cell right"><label>Box style</label>
+          <button class="style-link" data-stylebtn="${box.id}"><span data-stylelabel="${box.id}">${STYLES[styleKey].name}</span> <span class="chev">›</span></button>
+        </div>
+      </div>
+    </div>
+    ${buyArea}
+  </div>`;
+}
+function renderBoxes() {
+  const car = $('#carousel');
+  const pos = car.scrollLeft;
+  car.innerHTML = BOXES.map(slideHTML).join('') +
+    `<button class="carousel-nav prev" id="carPrev" aria-label="Previous box">‹</button>
+     <button class="carousel-nav next" id="carNext" aria-label="Next box">›</button>`;
+  $('#carouselDots').innerHTML = BOXES.map((_, i) => `<span class="dot${i === currentSlide ? ' active' : ''}"></span>`).join('');
+  car.scrollLeft = pos;
+  $('#carPrev').addEventListener('click', () => scrollToSlide(currentSlide - 1));
+  $('#carNext').addEventListener('click', () => scrollToSlide(currentSlide + 1));
+  car.querySelectorAll('[data-buy]').forEach(b => b.addEventListener('click', () => buyBox(b.dataset.buy, false)));
+  car.querySelectorAll('[data-odds]').forEach(b => b.addEventListener('click', () => openOdds(b.dataset.odds)));
+  car.querySelectorAll('[data-stylebtn]').forEach(b => b.addEventListener('click', () => openOdds(b.dataset.stylebtn)));
+}
+function scrollToSlide(i) {
+  const car = $('#carousel');
+  const n = Math.max(0, Math.min(BOXES.length - 1, i));
+  car.scrollTo({ left: n * car.clientWidth, behavior: 'smooth' });
+}
+$('#carousel').addEventListener('scroll', () => {
+  const car = $('#carousel');
+  const idx = Math.round(car.scrollLeft / car.clientWidth);
+  if (idx !== currentSlide && idx >= 0 && idx < BOXES.length) {
+    currentSlide = idx;
+    $$('#carouselDots .dot').forEach((d, i) => d.classList.toggle('active', i === idx));
+  }
+});
+
+/* ── odds / box-style sheet ────────────────────────────────────────── */
+let sheetBox = null, sheetStyle = 'normal';
+function openOdds(boxId) {
+  sheetBox = boxById(boxId);
+  sheetStyle = state.boxStyles[boxId];
+  $('#oddsTitle').textContent = sheetBox.name;
+  renderStyleOptions();
+  renderBands();
+  openModal($('#oddsModal'));
+}
+function renderStyleOptions() {
+  $('#styleOptions').innerHTML = Object.entries(STYLES).map(([key, s]) => `
+    <button class="style-opt${sheetStyle === key ? ' selected' : ''}" data-styleopt="${key}">
+      <span class="style-radio"></span>
+      <span><span class="style-opt-name">${s.name}</span>
+      <span class="style-opt-desc" style="display:block">${s.desc}</span></span>
+    </button>`).join('');
+  $$('#styleOptions [data-styleopt]').forEach(b => b.addEventListener('click', () => {
+    sheetStyle = b.dataset.styleopt;
+    renderStyleOptions(); renderBands();
+  }));
+}
+function renderBands() {
+  const { rows, activeMax } = computeActiveTable(sheetBox, sheetStyle, unlockedSet());
+  $('#bandList').innerHTML = rows.map((r, i) => `
+    <div class="band-row">
+      <span class="band-range">${fmtBand(r.lo)}–${fmtBand(r.hi)}${sheetBox.id === 'grail' && r.lo >= sheetBox.price ? '<span class="profit-pill">PROFIT ZONE</span>' : ''}</span>
+      <span class="band-track"><span class="band-fill" style="display:block;width:${r.pct}%;background:${BAND_COLORS[i % BAND_COLORS.length]}"></span></span>
+      <span class="band-pct">${r.pct.toFixed(1)}%</span>
+    </div>`).join('');
+  const lockedNote = activeMax < sheetBox.max
+    ? ` Max Pull is capped at ${fmtBand(activeMax)} until more chase watches unlock.` : '';
+  const profitNote = sheetBox.id === 'grail'
+    ? ' Bands marked PROFIT ZONE are worth more than the box price — about 1 in 7 pulls lands there.' : '';
+  $('#oddsMinMax').innerHTML =
+    `<span>Min Value <b>${fmtBand(sheetBox.min)}</b></span><span class="dots-line"></span><span><b>${fmtBand(activeMax)}</b> Max Pull</span>`;
+  $('#oddsGuarantee').textContent =
+    'All collectibles are backed by our buyback guarantee at 100% of Fair Market Value (FMV). Odds are calculated at the time of purchase.' + lockedNote + profitNote;
+}
+$('#oddsApply').addEventListener('click', () => {
+  state.boxStyles[sheetBox.id] = sheetStyle;
+  save();
+  const lbl = document.querySelector(`[data-stylelabel="${sheetBox.id}"]`);
+  if (lbl) lbl.textContent = STYLES[sheetStyle].name;
+  closeModal($('#oddsModal'));
+  toast(`${sheetBox.short} style set to ${STYLES[sheetStyle].name}`);
+});
+
+/* ── open flow (lift the lid) ──────────────────────────────────────── */
+let openCtx = null;
+function buyBox(boxId, free) {
+  const box = boxById(boxId);
+  if (boxLocked(box, state.unlockedBoxes)) {
+    toast(`${box.name} is locked — it opens when the house reserve reaches ${fmtBand(box.gateThreshold)}`);
+    return;
+  }
+  if (!free) {
+    if (state.balance < box.price) {
+      toast('Not enough demo funds — top up first');
+      openModal($('#topupModal'));
+      return;
+    }
+    state.balance = round2(state.balance - box.price);
+    state.totalSpent = round2(state.totalSpent + box.price);
+    save(); renderWallet();
+  }
+  openBoxFlow(box, state.boxStyles[boxId], free);
+}
+function openBoxFlow(box, styleKey, free) {
+  openCtx = { box, styleKey, free, done: false, item: null };
+  $('#openBoxName').textContent = free ? box.name + ' — FREE' : box.name;
+  $('#openHint').textContent = 'Drag upward on the lid — or tap the button — to open';
+  $('#boxVisual').innerHTML = boxSVG(box);
+  const wrap = $('#boxStageWrap');
+  wrap.classList.remove('opened');
+  const lid = $('#lidFlap');
+  lid.style.transform = '';
+  lid.style.opacity = '';
+  $('#openProgressFill').style.width = '0%';
+  $('#openStageBox').hidden = false;
+  $('#openStageCard').hidden = true;
+  $('#openClose').hidden = false;
+  dragTotal = 0;
+  $('#openOverlay').hidden = false;
+}
+$('#openClose').addEventListener('click', () => {
+  if (openCtx && !openCtx.done) {
+    if (!openCtx.free) {  // refund an un-opened purchase
+      state.balance = round2(state.balance + openCtx.box.price);
+      state.totalSpent = round2(state.totalSpent - openCtx.box.price);
+      save(); renderWallet();
+      toast('Purchase refunded');
+    }
+  }
+  openCtx = null;
+  $('#openOverlay').hidden = true;
+});
+
+/* drag upward to lift the lid */
+let dragTotal = 0, dragging = false, lastY = 0;
+const lidWrap = $('#boxStageWrap');
+lidWrap.addEventListener('pointerdown', e => {
+  if (!openCtx || openCtx.done) return;
+  dragging = true; lastY = e.clientY;
+  lidWrap.setPointerCapture(e.pointerId);
+});
+lidWrap.addEventListener('pointermove', e => {
+  if (!dragging || !openCtx || openCtx.done) return;
+  dragTotal += Math.abs(e.clientY - lastY);
+  lastY = e.clientY;
+  const p = Math.min(1, dragTotal / 150);
+  const lid = $('#lidFlap');
+  lid.style.transform = `rotateX(${-p * 62}deg) translateY(${-p * 10}px)`;
+  $('#openProgressFill').style.width = (p * 100) + '%';
+  if (p >= 1) { dragging = false; finishOpen(); }
+});
+lidWrap.addEventListener('pointerup', () => { dragging = false; });
+lidWrap.addEventListener('pointercancel', () => { dragging = false; });
+$('#openButton').addEventListener('click', () => { if (openCtx && !openCtx.done) finishOpen(); });
+
+function finishOpen() {
+  if (!openCtx || openCtx.done) return;
+  openCtx.done = true;
+  $('#lidFlap').style.transform = '';
+  $('#boxStageWrap').classList.add('opened');
+  $('#openProgressFill').style.width = '100%';
+  setTimeout(revealWatch, 620);
+}
+function revealWatch() {
+  if (!openCtx) return;
+  const { box, styleKey } = openCtx;
+  const unlocked = unlockedSet();
+  const value = drawValue(box, styleKey, unlocked);
+  const rarity = rarityForValue(box, value);
+  let pool = watchPoolFor(box, rarity, unlocked);
+  if (!pool.length) pool = WATCHES.Common;  // defensive; cannot happen with contiguous unlocks
+  const watch = pool[Math.floor(Math.random() * pool.length)];
+  const item = {
+    uid: 'w' + Date.now() + Math.floor(Math.random() * 1e6),
+    name: watch.name, rarity, value,
+    boxId: box.id, boxName: box.name, style: styleKey,
+    ts: Date.now(), status: 'kept'
+  };
+  openCtx.item = item;
+  state.collection.push(item);
+  state.points += POINTS_PER_OPEN;
+  state.totalOpens += 1;
+  state.totalPulled = round2(state.totalPulled + value);
+  let newly = [], newlyBoxes = [];
+  if (!openCtx.free) {
+    const res = applyMargin(state.reserve, state.unlockedChase, box.price, value, state.unlockedBoxes);
+    state.reserve = res.reserve;
+    state.unlockedChase = res.unlocked;
+    state.unlockedBoxes = res.unlockedBoxes;
+    newly = res.newly;
+    newlyBoxes = res.newlyBoxes;
+  }
+  save();
+  const banner = $('#rarityBanner');
+  banner.textContent = rarity === 'Common' ? 'NICE PULL' : rarity.toUpperCase() + ' PULL' + (rarity === 'Epic' || rarity === 'Legendary' || rarity === 'Grail' ? '!!' : '!');
+  banner.style.color = `var(--r-${rarity.toLowerCase()})`;
+  $('#revealSlot').innerHTML = cardHTML(watch, rarity, valueHTML(value), '');
+  $('#revealSellBtn').textContent = `Sell back · +${fmt$(round2(value * SELL_RATE))}`;
+  $('#openStageBox').hidden = true;
+  $('#openStageCard').hidden = false;
+  $('#openClose').hidden = true;
+  renderAll();
+  newly.forEach(c => toast(`New chase watch unlocked: ${c.watch} (${c.boxName}) is now in the pool!`));
+  newlyBoxes.forEach(b => toast(`${b.name} unlocked — the ${fmtBand(b.price)} box is now open!`));
+}
+$('#revealSellBtn').addEventListener('click', () => { if (openCtx && openCtx.item) settleReveal('sold'); });
+$('#revealShipBtn').addEventListener('click', () => { if (openCtx && openCtx.item) settleReveal('shipped'); });
+$('#revealKeepBtn').addEventListener('click', () => { if (openCtx && openCtx.item) settleReveal('kept'); });
+function settleReveal(action) {
+  const item = openCtx.item;
+  if (action === 'sold') {
+    const credit = round2(item.value * SELL_RATE);
+    state.balance = round2(state.balance + credit);
+    state.totalSoldBack = round2(state.totalSoldBack + credit);
+    state.collection = state.collection.filter(c => c.uid !== item.uid);
+    item.status = 'sold';
+  } else if (action === 'shipped') {
+    item.status = 'shipping';
+  }
+  state.history.push({
+    ts: Date.now(), box: item.boxName, item: item.name,
+    rarity: item.rarity, value: item.value,
+    action: action === 'sold' ? 'Sold back' : action === 'shipped' ? 'Shipped' : 'Kept'
+  });
+  save();
+  openCtx = null;
+  $('#openOverlay').hidden = true;
+  renderAll();
+  if (action === 'sold') toast(`Sold back for ${fmt$(round2(item.value * SELL_RATE))}`);
+  if (action === 'shipped') toast('Shipping requested — arrives within 2 weeks');
+}
+
+/* ── showroom ──────────────────────────────────────────────────────── */
+let showroomBox = 'bronze';
+function renderShowroom() {
+  $('#showroomChips').innerHTML = BOXES.map(b =>
+    `<button class="chip${b.id === showroomBox ? ' active' : ''}" data-chip="${b.id}">${b.short} · ${fmtBand(b.price)}</button>`).join('');
+  $$('#showroomChips [data-chip]').forEach(b => b.addEventListener('click', () => {
+    showroomBox = b.dataset.chip; renderShowroom();
+  }));
+  const unlocked = unlockedSet();
+  const reserve = state.reserve;
+  const cards = CHASE.filter(c => c.boxId === showroomBox)
+    .sort((a, b) => a.value - b.value);
+  const selBox = boxById(showroomBox);
+  let gateNote = '';
+  if (boxLocked(selBox, state.unlockedBoxes)) {
+    const need = selBox.gateThreshold + BUYBACK_FLOOR;
+    const pct = Math.min(100, (reserve / need) * 100);
+    gateNote = `<div class="gate-note">
+      <div class="lock-line">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+        The ${selBox.name} box itself is locked
+      </div>
+      <div class="pb-track"><div class="pb-fill" style="width:${pct}%"></div></div>
+      <div class="lock-sub">Unlocks when the house reserve reaches ${fmtBand(selBox.gateThreshold)} — funded by every box opened. Reserve ${fmt$(reserve)} of ${fmtBand(need)} (gate + ${fmtBand(BUYBACK_FLOOR)} protected floor). The box cannot be bought or opened until then.</div>
+    </div>`;
+  }
+  $('#showroomGrid').innerHTML = gateNote + cards.map(c => {
+    const watch = watchByName(c.watch);
+    const isOpen = unlocked.has(c.id);
+    let extra;
+    if (isOpen) {
+      extra = `<span class="pool-badge">IN THE POOL</span>`;
+    } else {
+      const need = c.threshold + BUYBACK_FLOOR;
+      const pct = Math.min(100, (reserve / need) * 100);
+      extra = `<div class="lock-block">
+        <div class="lock-line">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+          Unlocks at ${fmtBand(need)} reserve
+        </div>
+        <div class="pb-track"><div class="pb-fill" style="width:${pct}%"></div></div>
+        <div class="lock-sub">Reserve ${fmt$(reserve)} of ${fmtBand(need)} — sourcing cost ${fmtBand(c.threshold)} + ${fmtBand(BUYBACK_FLOOR)} protected floor. Not in the odds or Max Pull yet.</div>
+      </div>`;
+    }
+    return cardHTML(watch, c.tier, `<div class="wcard-value"><small>CHASE VALUE · ${c.boxName}</small>${fmtBand(c.value)}</div>`, extra)
+      .replace('class="wcard', 'class="wcard' + (isOpen ? '' : ' locked'));
+  }).join('');
+}
+
+/* ── collection ────────────────────────────────────────────────────── */
+function renderCollection() {
+  const owned = state.collection.filter(c => c.status === 'kept' || c.status === 'shipping');
+  const total = owned.reduce((s, c) => s + c.value, 0);
+  $('#collectionTotal').textContent = fmt$(total);
+  $('#collectionCount').textContent = owned.length;
+  $('#collectionEmpty').style.display = owned.length ? 'none' : 'block';
+  $('#collectionGrid').innerHTML = owned.slice().reverse().map(c => {
+    const watch = watchByName(c.name);
+    let extra;
+    if (c.status === 'shipping') {
+      extra = `<div class="ship-tag">SHIPPING — ARRIVES WITHIN 2 WEEKS</div>`;
+    } else {
+      extra = `<button class="btn-sell-card" data-sell="${c.uid}">Sell back · +${fmt$(round2(c.value * SELL_RATE))}</button>
+               <button class="btn-ship-card" data-ship="${c.uid}">Ship it to me</button>`;
+    }
+    return cardHTML(watch, c.rarity, valueHTML(c.value), extra);
+  }).join('');
+  $$('#collectionGrid [data-sell]').forEach(b => b.addEventListener('click', () => sellFromCollection(b.dataset.sell)));
+  $$('#collectionGrid [data-ship]').forEach(b => b.addEventListener('click', () => shipFromCollection(b.dataset.ship)));
+}
+function sellFromCollection(uid) {
+  const item = state.collection.find(c => c.uid === uid);
+  if (!item || item.status !== 'kept') return;
+  const credit = round2(item.value * SELL_RATE);
+  state.balance = round2(state.balance + credit);
+  state.totalSoldBack = round2(state.totalSoldBack + credit);
+  state.collection = state.collection.filter(c => c.uid !== uid);
+  state.history.push({ ts: Date.now(), box: item.boxName, item: item.name, rarity: item.rarity, value: item.value, action: 'Sold back' });
+  save(); renderAll();
+  toast(`Sold ${item.name} for ${fmt$(credit)}`);
+}
+function shipFromCollection(uid) {
+  const item = state.collection.find(c => c.uid === uid);
+  if (!item || item.status !== 'kept') return;
+  item.status = 'shipping';
+  state.history.push({ ts: Date.now(), box: item.boxName, item: item.name, rarity: item.rarity, value: item.value, action: 'Shipped' });
+  save(); renderAll();
+  toast('Shipping requested — arrives within 2 weeks');
+}
+
+/* ── rewards ───────────────────────────────────────────────────────── */
+function renderRewards() {
+  $('#pointsValue').textContent = state.points;
+  const pct = Math.min(100, (state.points / REWARD_POINTS) * 100);
+  $('#pointsProgress').style.width = pct + '%';
+  $('#pointsLabel').textContent = state.points >= REWARD_POINTS
+    ? 'Reward ready — claim your free Bronze Box!'
+    : `${state.points} / ${REWARD_POINTS} points to a free Bronze Box`;
+  $('#claimRewardBtn').disabled = state.points < REWARD_POINTS;
+}
+$('#claimRewardBtn').addEventListener('click', () => {
+  if (state.points < REWARD_POINTS) return;
+  state.points -= REWARD_POINTS;
+  save(); renderRewards();
+  buyBox('bronze', true);
+});
+
+/* ── account / reserve ─────────────────────────────────────────────── */
+function renderAccount() {
+  $('#statOpens').textContent = state.totalOpens;
+  $('#statSpent').textContent = fmt$(state.totalSpent);
+  $('#statPulled').textContent = fmt$(state.totalPulled);
+  $('#statSold').textContent = fmt$(state.totalSoldBack);
+  $('#reserveAmount').textContent = fmt$(state.reserve);
+  $('#reserveFloor').textContent = fmt$(BUYBACK_FLOOR);
+  const unlocked = unlockedSet();
+  const rows = CHASE.filter(c => !unlocked.has(c.id)).map(c => ({
+    title: c.watch,
+    span: `${c.boxName} · ${c.tier}`,
+    sub: `Sourcing cost ${fmtBand(c.threshold)} · unlocks at ${fmtBand(c.threshold + BUYBACK_FLOOR)} reserve`,
+    need: c.threshold + BUYBACK_FLOOR
+  })).concat(BOXES.filter(b => boxLocked(b, state.unlockedBoxes)).map(b => ({
+    title: `${b.name} — box unlock`,
+    span: 'BOX GATE',
+    sub: `Reserve must cover the ${fmtBand(b.max)} max pull × 1.25 and keep the floor · unlocks at ${fmtBand(b.gateThreshold + BUYBACK_FLOOR)} reserve`,
+    need: b.gateThreshold + BUYBACK_FLOOR
+  }))).sort((a, b) => a.need - b.need).slice(0, 5);
+  $('#nextUnlockList').innerHTML = rows.length ? rows.map(rw => {
+    const pct = Math.min(100, (state.reserve / rw.need) * 100);
+    return `<div class="unlock-row">
+      <div class="unlock-main"><b>${rw.title}</b><span>${rw.span}</span></div>
+      <div class="lock-sub">${rw.sub}</div>
+      <div class="pb-track"><div class="pb-fill" style="width:${pct}%"></div></div>
+    </div>`;
+  }).join('') : '<p class="unlock-empty">Every chase watch and box is unlocked. The full pool is live.</p>';
+  if (state.lastSim) {
+    const s = state.lastSim;
+    $('#simSummary').textContent =
+      `Last simulation: ${(s.count || 25).toLocaleString('en-US')} opens moved the reserve by ${s.delta >= 0 ? '+' : ''}${fmt$(s.delta)}` +
+      (s.unlocked.length ? ` and unlocked ${s.unlocked.join(', ')}.` : '.') +
+      ((s.unlockedBoxes && s.unlockedBoxes.length) ? ` Box unlocked: ${s.unlockedBoxes.join(', ')}.` : '') +
+      ` Total simulated opens so far: ${state.simOpens}. Simulated opens never touch your wallet or collection.`;
+  }
+  const hist = state.history.slice().reverse();
+  $('#historyEmpty').style.display = hist.length ? 'none' : 'block';
+  $('#historyList').innerHTML = hist.map(h => `
+    <div class="history-item">
+      <div class="history-main"><b>${h.item}</b><span>${fmt$(h.value)}</span></div>
+      <div class="history-sub">
+        <span>${h.box} · ${h.rarity} · ${new Date(h.ts).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}, ${new Date(h.ts).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}</span>
+        <span class="history-action ${h.action === 'Sold back' ? 'sold' : h.action === 'Shipped' ? 'shipped' : ''}">${h.action}</span>
+      </div>
+    </div>`).join('');
+  refreshVaultSimBtn();
+}
+/* Run n simulated customer opens through the exact economy the app uses:
+   same box mix, same drawValue odds, same applyMargin/reserve/unlock path.
+   Locked boxes (incl. the Grail Vault until its gate opens) are excluded.
+   Mutates state and collects unlock names — no toasts, no rendering, so
+   callers can run big batches silently and summarize once at the end. */
+function runSimBatch(n) {
+  const weights = [0.38, 0.28, 0.15, 0.10, 0.06, 0.03];
+  const unlockedNames = [];
+  const unlockedBoxNames = [];
+  for (let i = 0; i < n; i++) {
+    const openBoxes = BOXES.filter(b => !boxLocked(b, state.unlockedBoxes));
+    const wsum = openBoxes.reduce((s, b) => s + weights[BOXES.indexOf(b)], 0);
+    let r = Math.random() * wsum, acc = 0, box = openBoxes[0];
+    for (const b of openBoxes) { acc += weights[BOXES.indexOf(b)]; if (r < acc) { box = b; break; } }
+    const v = drawValue(box, state.boxStyles[box.id], unlockedSet());
+    const res = applyMargin(state.reserve, state.unlockedChase, box.price, v, state.unlockedBoxes);
+    state.reserve = res.reserve;
+    state.unlockedChase = res.unlocked;
+    state.unlockedBoxes = res.unlockedBoxes;
+    res.newly.forEach(c => unlockedNames.push(c.watch));
+    res.newlyBoxes.forEach(b => unlockedBoxNames.push(b.name));
+    state.simOpens += 1;
+  }
+  return { unlockedNames, unlockedBoxNames };
+}
+/* The Vault button is live only while the Grail Vault is still locked;
+   once the gate opens it stays disabled as a status label. */
+function refreshVaultSimBtn() {
+  const btn = $('#simVaultBtn');
+  if (!btn || simBulkRunning) return;
+  const unlocked = state.unlockedBoxes.includes('grail');
+  btn.disabled = unlocked;
+  btn.textContent = unlocked ? 'Grail Vault unlocked ✓' : 'Simulate opens until the Vault unlocks';
+}
+$('#simBtn').addEventListener('click', () => {
+  const before = state.reserve;
+  const { unlockedNames, unlockedBoxNames } = runSimBatch(25);
+  const delta = round2(state.reserve - before);
+  state.lastSim = { count: 25, delta, unlocked: unlockedNames, unlockedBoxes: unlockedBoxNames };
+  save(); renderAll();
+  toast(`Simulated 25 opens: reserve ${delta >= 0 ? '+' : ''}${fmt$(delta)}${unlockedNames.length ? ` · unlocked ${unlockedNames.length} chase watch(es)` : ''}${unlockedBoxNames.length ? ` · ${unlockedBoxNames.join(', ')} unlocked!` : ''}`);
+});
+/* Bulk run: batches of 25 through runSimBatch, chunked on a timer so the
+   page never freezes, with NO re-render until the run ends. Stops the
+   moment the Grail Vault gate opens (chase unlocks drain the reserve on
+   the way up, so this takes far more than 1,000 opens) or at a 100,000
+   open safety cap. Chase unlocks along the way are counted, not toasted. */
+let simBulkRunning = false;
+$('#simVaultBtn').addEventListener('click', () => {
+  if (simBulkRunning) return;
+  if (state.unlockedBoxes.includes('grail')) {
+    /* Already unlocked: fall back to a straight 1,000-open run. */
+    const before = state.reserve;
+    const { unlockedNames, unlockedBoxNames } = runSimBatch(1000);
+    const delta = round2(state.reserve - before);
+    state.lastSim = { count: 1000, delta, unlocked: unlockedNames, unlockedBoxes: unlockedBoxNames };
+    save(); renderAll();
+    toast(`Simulated 1,000 opens (Grail Vault already unlocked): reserve ${delta >= 0 ? '+' : ''}${fmt$(delta)}`);
+    return;
+  }
+  simBulkRunning = true;
+  const vaultBtn = $('#simVaultBtn'), simBtn = $('#simBtn');
+  simBtn.disabled = true;
+  vaultBtn.disabled = true;
+  vaultBtn.textContent = 'Simulating…';
+  const before = state.reserve;
+  const CAP = 100000, BATCH = 25;
+  let opens = 0;
+  const chaseUnlocks = [];
+  (function step() {
+    const t0 = Date.now();
+    while (opens < CAP && !state.unlockedBoxes.includes('grail') && Date.now() - t0 < 40) {
+      const r = runSimBatch(BATCH);
+      opens += BATCH;
+      r.unlockedNames.forEach(n => chaseUnlocks.push(n));
+    }
+    if (!state.unlockedBoxes.includes('grail') && opens < CAP) { setTimeout(step, 0); return; }
+    const delta = round2(state.reserve - before);
+    const vaultOpen = state.unlockedBoxes.includes('grail');
+    state.lastSim = { count: opens, delta, unlocked: chaseUnlocks, unlockedBoxes: vaultOpen ? ['Grail Vault'] : [] };
+    simBulkRunning = false;
+    simBtn.disabled = false;
+    save(); renderAll();
+    toast(vaultOpen
+      ? `Simulated ${opens.toLocaleString('en-US')} opens — Grail Vault unlocked! Reserve ${fmt$(state.reserve)} after ${chaseUnlocks.length} chase unlocks along the way.`
+      : `Simulated ${opens.toLocaleString('en-US')} opens (safety cap hit) — the Grail Vault is still locked. Reserve ${fmt$(state.reserve)}.`);
+  })();
+});
+$('#resetBtn').addEventListener('click', () => {
+  try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+  state = defaultState();
+  save(); renderAll();
+  toast('Demo data reset');
+});
+
+/* ── live pulls feed (SIMULATED demo data) ─────────────────────────── */
+const FEED_NAMES = ['Marcus T.', 'Elena R.', 'Jay K.', 'Priya S.', 'Tom W.', 'Alicia G.', 'Devon M.', 'Sofia L.', 'Chris B.', 'Nina P.', 'Omar H.', 'Grace C.', 'Leo F.', 'Maya D.', 'Sam R.', 'Ivy Z.', 'Noah P.', 'Ruby A.', 'Kai N.', 'Lena V.'];
+const FEED_WEIGHTS = [0.35, 0.30, 0.18, 0.11, 0.05, 0.01];
+const ALL_UNLOCKED = new Set(CHASE.map(c => c.id));
+function feedItemHTML(ago) {
+  /* Grail Vault pulls appear only after the box itself has unlocked. */
+  const openBoxes = BOXES.filter(b => !boxLocked(b, state.unlockedBoxes));
+  const wsum = openBoxes.reduce((s, b) => s + FEED_WEIGHTS[BOXES.indexOf(b)], 0);
+  let r = Math.random() * wsum, acc = 0, box = openBoxes[0];
+  for (const b of openBoxes) { acc += FEED_WEIGHTS[BOXES.indexOf(b)]; if (r < acc) { box = b; break; } }
+  const value = drawValue(box, 'normal', ALL_UNLOCKED);
+  const rarity = rarityForValue(box, value);
+  const pool = WATCHES[rarity];
+  const watch = pool[Math.floor(Math.random() * pool.length)];
+  const name = FEED_NAMES[Math.floor(Math.random() * FEED_NAMES.length)];
+  return `<div class="feed-item">
+    <div class="feed-ava">${name.charAt(0)}</div>
+    <div class="feed-main"><b>${name}</b> pulled <b>${watch.name}</b>
+      <span>${box.name} · ${rarity} · ${ago}</span>
+    </div>
+    <div class="feed-val">${fmtBand(Math.round(value))}</div>
+  </div>`;
+}
+function seedFeed() {
+  const feed = $('#liveFeed');
+  if (!feed) return;
+  const agos = ['just now', '24s ago', '51s ago', '1m ago', '2m ago'];
+  feed.innerHTML = agos.map(a => feedItemHTML(a)).join('');
+}
+function tickFeed() {
+  const feed = $('#liveFeed');
+  if (!feed) return;
+  const div = document.createElement('div');
+  div.innerHTML = feedItemHTML('just now');
+  const item = div.firstElementChild;
+  item.classList.add('feed-new');
+  feed.prepend(item);
+  while (feed.children.length > 7) feed.removeChild(feed.lastElementChild);
+}
+
+/* ── render all / init ─────────────────────────────────────────────── */
+function renderAll() {
+  renderWallet();
+  renderBoxes();
+  renderShowroom();
+  renderCollection();
+  renderRewards();
+  renderAccount();
+}
+renderAll();
+seedFeed();
+setInterval(tickFeed, 4500);
+}
+
+</script>
+</body>
+</html>
